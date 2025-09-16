@@ -130,11 +130,33 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Advisor.cpp" />
+    <ClCompile Include="Board.cpp" />
+    <ClCompile Include="Cannon.cpp" />
+    <ClCompile Include="Elephant.cpp" />
+    <ClCompile Include="General.cpp" />
+    <ClCompile Include="HashTable.cpp" />
+    <ClCompile Include="Heap.cpp" />
+    <ClCompile Include="Knight.cpp" />
+    <ClCompile Include="Pawn.cpp" />
     <ClCompile Include="Piece.cpp" />
+    <ClCompile Include="Rook.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="Stack.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Advisor.h" />
+    <ClInclude Include="Board.h" />
+    <ClInclude Include="Cannon.h" />
+    <ClInclude Include="Elephant.h" />
+    <ClInclude Include="General.h" />
+    <ClInclude Include="HashTable.h" />
+    <ClInclude Include="Heap.h" />
+    <ClInclude Include="Knight.h" />
+    <ClInclude Include="Pawn.h" />
     <ClInclude Include="Piece.h" />
+    <ClInclude Include="Rook.h" />
+    <ClInclude Include="Stack.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

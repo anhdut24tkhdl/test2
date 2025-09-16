@@ -1,0 +1,37 @@
+﻿#pragma once﻿
+#include "Advisor.h"
+
+
+Advisor::Advisor(PlayerColor c, int x, int y, bool alive, int p, const sf::Sprite sprite) : Piece(c, x, y, alive, p,sprite) {
+
+   
+}
+bool Advisor::isValidMove(int toX, int toY, Piece* grid[10][9]) const {
+    if (toX < 0 || toX > 9 || toY < 0 || toY > 8) return false;
+    if (toY < 3 || toY > 5) return false;
+    if (color == PlayerColor::RED) {
+        if (toX < 7 || toX > 9) return false;
+    }
+    else {
+        if (toX < 0 || toX > 2) return false;
+    }
+    int dx = abs(toX - x);
+    int dy = abs(toY - y);
+    return (dx == 1 && dy == 1);
+}
+std::string Advisor::getSymbol() const {
+    return (color == PlayerColor::RED) ? "RA" : "BA";
+}
+void Advisor::updatePoint(int x, int y)
+{
+    
+    
+    if (this->color == PlayerColor::RED && (x < 7 || y < 3 || y > 5))
+        this->Point = 0;
+    if (this->color == PlayerColor::BLACK && (x > 2 || y < 3 || y > 5))
+        this->Point = 0;
+
+    
+    if ((x == 8 && y == 4) || (x == 7 && (y == 3 || y == 5)))
+        this->Point += 10;
+}
