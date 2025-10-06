@@ -1,6 +1,8 @@
 ﻿#include <SFML/Audio.hpp>
 #include <optional>
 #include"Board.h"
+#include<random>
+#include<ctime>
 //#include "Piece.h"
 int lamtron(int x)
 {
@@ -15,6 +17,7 @@ int main() {
     Board board;
 
     sf::Texture quanxeden;
+    quanxeden.setSmooth(1);
     sf::Texture quanxedo;
     sf::Texture bancotrong;
     sf::Texture quantuongden;
@@ -29,7 +32,9 @@ int main() {
     sf::Texture quanvuado;
     sf::Texture quanmaden;
     sf::Texture quanmado;
+    sf::Texture youlose;
     // load anh len
+	youlose.loadFromFile("youlose.png");
     quanxeden.loadFromFile("quanxeden.png");
     quanxedo.loadFromFile("quanxedo.png");
     bancotrong.loadFromFile("bancotrong.png");
@@ -45,9 +50,9 @@ int main() {
     quanvuado.loadFromFile("quanvuado.png");
     quanmaden.loadFromFile("quanmaden.png");
     quanmado.loadFromFile("quanmado.png");
-    bancotrong.loadFromFile("bancotrong1.png");
+    bancotrong.loadFromFile("bancotrong.png");
+    //quan co do
 	sf::Sprite boardSprite(bancotrong);
-
     sf::Sprite quantuong(quantuongdo);
     sf::Sprite quantuong1(quantuongdo);
     sf::Sprite quanxe(quanxedo);
@@ -161,7 +166,9 @@ int main() {
 
 
 
-
+    sf::CircleShape node(38);
+    
+    sf::CircleShape node1(10);
     Piece* selectedPiece = nullptr;
     std::vector<sf::CircleShape> dots;
     bool pass = false;
@@ -174,7 +181,9 @@ int main() {
 
 
             // Nhấn chuột
-            if (board.currentPlayer == PlayerColor::RED) {
+            if (board.currentPlayer == PlayerColor::RED){
+                 node.setFillColor(sf::Color::Transparent);
+                // node1.setFillColor(sf::Color::Transparent);
                 if (event->is<sf::Event::MouseButtonPressed>()) {
                     auto mouse = event->getIf<sf::Event::MouseButtonPressed>();
                     mousePos = window.mapPixelToCoords(mouse->position);
@@ -201,6 +210,8 @@ int main() {
                             }
                         }
 
+
+
                         if (!handled) {
                             if (selectedPiece) selectedPiece->sprite.setColor(sf::Color::White);
                             dots.clear();
@@ -220,6 +231,19 @@ int main() {
                                             sf::CircleShape dot(10.f);
                                             dot.setFillColor(sf::Color::Red);
                                             dot.setPosition(PosBoard[m.first][m.second] - sf::Vector2f(10.f, 10.f));
+                                            int col = lamtron(dot.getPosition().x) / 100 - 1;
+                                            int row = lamtron(dot.getPosition().y) / 100 - 1;
+
+                                           
+                                                if (board.grid[row][col]!=nullptr) {
+                                                   
+													dot.setOrigin({ dot.getRadius(),dot.getRadius() });
+                                                   dot.setScale({ 4,4});
+													
+                                                    dot.setFillColor(sf::Color(255,0,0,0));
+                                                    board.grid[row][col]->sprite.setColor(sf::Color::Magenta);
+                                                }
+                                          
                                             dots.push_back(dot);
 
                                         }
@@ -229,15 +253,22 @@ int main() {
                                     }
 
                         }
+                      
+                        
+
+                         
 
 
-                        //...
+                      
+                           
 
-
-
-
-
-
+                        if (selectedPiece==nullptr)
+                        {
+                            for (int i = 0; i < 10; i++)
+                                for (int j = 0; j < 9; j++)
+                                    if (board.grid[i][j] != nullptr && board.grid[i][j]->getColor() == PlayerColor::BLACK)
+                                        board.grid[i][j]->sprite.setColor(sf::Color::White);
+                        }
 
 
                         if (!handled && selectedPiece) {
@@ -245,6 +276,7 @@ int main() {
                             selectedPiece = nullptr;
                             dots.clear();
                         }
+                       
 
 
                     }
@@ -253,17 +285,10 @@ int main() {
 
 
 
+                        
 
 
-
-
-
-
-
-
-
-
-
+                    
 
 
 
@@ -272,8 +297,24 @@ int main() {
 
 
             }
-            else{}
+            else {
+                Move move = board.findBestMove(4);
+                board.movePiece(move.fromX, move.fromY, move.toX, move.toY);
+                std::cout << "AI di chuyen tu (" << move.fromX << ", " << move.fromY << ") den (" << move.toX << ", " << move.toY << ")\n";
+                std::cout << PosBoard[move.toX][move.toY].x << " " << PosBoard[move.toX][move.toY].y << "\n";
+                board.grid[move.toX][move.toY]->sprite.setPosition({ PosBoard[move.toX][move.toY].x - size.x / 2, PosBoard[move.toX][move.toY].y - size.y / 2 });
+                node1.setFillColor(sf::Color::Yellow);
+                node.setOutlineThickness(2);
+                node.setOutlineColor(sf::Color::Red);
+                int bankinh = node.getRadius();
+                int bankinh1 = node1.getRadius();
+                node.setPosition({ PosBoard[move.toX][move.toY].x - bankinh ,PosBoard[move.toX][move.toY].y - bankinh
+                    });
 
+                node1.setPosition({ PosBoard[move.fromX][move.fromY].x - bankinh1 ,PosBoard[move.fromX][move.fromY].y - bankinh1 });
+
+
+            }
         }
 
         window.clear();
@@ -286,7 +327,15 @@ int main() {
         {
             window.draw(dot);
         }
-       
+        if (board.isGameover())
+       {
+			
+			sf::Sprite lose(youlose);
+			lose.setPosition({ 50,300 });
+			window.draw(lose);
+       }
+        window.draw(node);
+        window.draw(node1);
         window.display();
     }
 

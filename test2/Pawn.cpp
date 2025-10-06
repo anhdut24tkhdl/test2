@@ -46,7 +46,7 @@ void Pawn::updatePoint(int x, int y)
     {
 		if (x == 4) this->Point += 5;
         if (x > 4) {
-            for (int i = x; i <= 9; i++)
+            
                 this->Point += 10;
 		}
     }

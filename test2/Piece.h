@@ -26,7 +26,7 @@ public:
     int getX() const;
     int getY() const;
     virtual void updatePoint(int x, int y) {};
-    
+	int getPoint() const { return Point; }
 };
 
 #endif
