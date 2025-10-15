@@ -47,6 +47,12 @@ std::string Rock::getSymbol() const {
 void Rock::updatePoint(int x, int y)
 {
    
-    if (y >= 3 && y <= 5) this->Point += 15;
-    if (x >= 3 && x <= 6) this->Point += 15;
+    if (y >= 3 && y <= 5) this->Point += 35;
+    if (x >= 3 && x <= 6) this->Point += 35;
+}
+int Rock::getsymbolvalue() const
+{
+    if (getSymbol() == "RR") return 13;
+    else return 6;
+
 }

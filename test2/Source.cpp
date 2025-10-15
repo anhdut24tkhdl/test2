@@ -10,7 +10,7 @@ int lamtron(int x)
     return rounded;
 }
 int main() {
-    sf::RenderWindow window(sf::VideoMode({ 1024, 1127 }), "China Chess");
+    sf::RenderWindow window(sf::VideoMode({ 1124, 1227 }), "China Chess");
     /*  Game game;
       game.start();*/
       // tao am thanh
@@ -33,7 +33,19 @@ int main() {
     sf::Texture quanmaden;
     sf::Texture quanmado;
     sf::Texture youlose;
+	sf::Texture checkmate;
+    sf::Texture trolai;
+    sf::Texture choilai;
+    sf::Texture thoatgame;
+    sf::Texture sanhcho;
+    sf::Texture nutchoigame;
     // load anh len
+	nutchoigame.loadFromFile("nutchoigame.png");
+	sanhcho.loadFromFile("sanhcho.png");
+	thoatgame.loadFromFile("quanxeden.png");
+    choilai.loadFromFile("quanxeden.png");
+    trolai.loadFromFile("quanxeden.png");
+	checkmate.loadFromFile("checkmate.png");
 	youlose.loadFromFile("youlose.png");
     quanxeden.loadFromFile("quanxeden.png");
     quanxedo.loadFromFile("quanxedo.png");
@@ -51,7 +63,9 @@ int main() {
     quanmaden.loadFromFile("quanmaden.png");
     quanmado.loadFromFile("quanmado.png");
     bancotrong.loadFromFile("bancotrong.png");
+    
     //quan co do
+	sf::Sprite nutchoigamee(nutchoigame);
 	sf::Sprite boardSprite(bancotrong);
     sf::Sprite quantuong(quantuongdo);
     sf::Sprite quantuong1(quantuongdo);
@@ -86,44 +100,54 @@ int main() {
     sf::Sprite quanvuad(quanvuaden);
     sf::Sprite quanmad(quanmaden);
     sf::Sprite quanmad1(quanmaden);
+    //ban co
+	sf::Sprite checkmatee(checkmate);
+    sf::Sprite trolaii(trolai);
+    sf::Sprite choilaii(choilai);
+	sf::Sprite thoatgamee(thoatgame);
+	sf::Sprite sanhchoo(sanhcho);
+    trolaii.setPosition({ 1000 , 1000 });
+    choilaii.setPosition({ 1000 , 900 });
+	thoatgamee.setPosition({ 1000 , 800 });
+	nutchoigamee.setPosition({ 150,700 });
     // phe do
 
-    board.grid[0][4] = new General(PlayerColor::BLACK, 0, 4, true, 10000, quanvuad);
-    board.grid[0][3] = new Advisor(PlayerColor::BLACK, 0, 3, true, 250, quansid);
-    board.grid[0][5] = new Advisor(PlayerColor::BLACK, 0, 5, true, 250, quansid1);
-    board.grid[0][2] = new Elephant(PlayerColor::BLACK, 0, 2, true, 250, quantuongd1);
-    board.grid[0][6] = new Elephant(PlayerColor::BLACK, 0, 6, true, 250, quantuongd);
-    board.grid[0][1] = new Knight(PlayerColor::BLACK, 0, 1, true, 400, quanmad);
-    board.grid[0][7] = new Knight(PlayerColor::BLACK, 0, 7, true, 400, quanmad1);
-    board.grid[0][0] = new Rock(PlayerColor::BLACK, 0, 0, true, 1000, quanxed);
-    board.grid[0][8] = new Rock(PlayerColor::BLACK, 0, 8, true, 1000, quanxed1);
-    board.grid[2][1] = new Cannon(PlayerColor::BLACK, 2, 1, true, 500, quanphaod);
-    board.grid[2][7] = new Cannon(PlayerColor::BLACK, 2, 7, true, 500, quanphaod1);
-    board.grid[3][0] = new Pawn(PlayerColor::BLACK, 3, 0, true, 100, quantotd);
-    board.grid[3][2] = new Pawn(PlayerColor::BLACK, 3, 2, true, 100, quantotd1);
-    board.grid[3][4] = new Pawn(PlayerColor::BLACK, 3, 4, true, 100, quantotd2);
-    board.grid[3][6] = new Pawn(PlayerColor::BLACK, 3, 6, true, 100, quantotd3);
-    board.grid[3][8] = new Pawn(PlayerColor::BLACK, 3, 8, true, 100, quantotd4);
+    //board.grid[0][4] = new General(PlayerColor::BLACK, 0, 4, true, 10000, quanvuad);
+    //board.grid[0][3] = new Advisor(PlayerColor::BLACK, 0, 3, true, 250, quansid);
+    //board.grid[0][5] = new Advisor(PlayerColor::BLACK, 0, 5, true, 250, quansid1);
+    //board.grid[0][2] = new Elephant(PlayerColor::BLACK, 0, 2, true, 250, quantuongd1);
+    //board.grid[0][6] = new Elephant(PlayerColor::BLACK, 0, 6, true, 250, quantuongd);
+    //board.grid[0][1] = new Knight(PlayerColor::BLACK, 0, 1, true, 400, quanmad);
+    //board.grid[0][7] = new Knight(PlayerColor::BLACK, 0, 7, true, 400, quanmad1);
+    //board.grid[0][0] = new Rock(PlayerColor::BLACK, 0, 0, true, 1000, quanxed);
+    //board.grid[0][8] = new Rock(PlayerColor::BLACK, 0, 8, true, 1000, quanxed1);
+    //board.grid[2][1] = new Cannon(PlayerColor::BLACK, 2, 1, true, 500, quanphaod);
+    //board.grid[2][7] = new Cannon(PlayerColor::BLACK, 2, 7, true, 500, quanphaod1);
+    //board.grid[3][0] = new Pawn(PlayerColor::BLACK, 3, 0, true, 100, quantotd);
+    //board.grid[3][2] = new Pawn(PlayerColor::BLACK, 3, 2, true, 100, quantotd1);
+    //board.grid[3][4] = new Pawn(PlayerColor::BLACK, 3, 4, true, 100, quantotd2);
+    //board.grid[3][6] = new Pawn(PlayerColor::BLACK, 3, 6, true, 100, quantotd3);
+    //board.grid[3][8] = new Pawn(PlayerColor::BLACK, 3, 8, true, 100, quantotd4);
 
-    // phe den
+    //// phe den
 
 
-    board.grid[9][4] = new General(PlayerColor::RED, 9, 4, true, 10000, quanvua);
-    board.grid[9][3] = new Advisor(PlayerColor::RED, 9, 3, true, 250, quansi1);
-    board.grid[9][5] = new Advisor(PlayerColor::RED, 9, 5, true, 250, quansi);
-    board.grid[9][2] = new Elephant(PlayerColor::RED, 9, 2, true, 250, quantuong);
-    board.grid[9][6] = new Elephant(PlayerColor::RED, 9, 6, true, 250, quantuong1);
-    board.grid[9][1] = new Knight(PlayerColor::RED, 9, 1, true, 400, quanma1);
-    board.grid[9][7] = new Knight(PlayerColor::RED, 9, 7, true, 400, quanma);
-    board.grid[9][0] = new Rock(PlayerColor::RED, 9, 0, true, 1000, quanxe1);
-    board.grid[9][8] = new Rock(PlayerColor::RED, 9, 8, true, 1000, quanxe);
-    board.grid[7][1] = new Cannon(PlayerColor::RED, 7, 1, true, 500, quanphao1);
-    board.grid[7][7] = new Cannon(PlayerColor::RED, 7, 7, true, 500, quanphao);
-    board.grid[6][0] = new Pawn(PlayerColor::RED, 6, 0, true, 100, quantot);
-    board.grid[6][2] = new Pawn(PlayerColor::RED, 6, 2, true, 100, quantot1);
-    board.grid[6][4] = new Pawn(PlayerColor::RED, 6, 4, true, 100, quantot2);
-    board.grid[6][6] = new Pawn(PlayerColor::RED, 6, 6, true, 100, quantot3);
-    board.grid[6][8] = new Pawn(PlayerColor::RED, 6, 8, true, 100, quantot4);
+    //board.grid[9][4] = new General(PlayerColor::RED, 9, 4, true, 10000, quanvua);
+    //board.grid[9][3] = new Advisor(PlayerColor::RED, 9, 3, true, 250, quansi1);
+    //board.grid[9][5] = new Advisor(PlayerColor::RED, 9, 5, true, 250, quansi);
+    //board.grid[9][2] = new Elephant(PlayerColor::RED, 9, 2, true, 250, quantuong);
+    //board.grid[9][6] = new Elephant(PlayerColor::RED, 9, 6, true, 250, quantuong1);
+    //board.grid[9][1] = new Knight(PlayerColor::RED, 9, 1, true, 400, quanma1);
+    //board.grid[9][7] = new Knight(PlayerColor::RED, 9, 7, true, 400, quanma);
+    //board.grid[9][0] = new Rock(PlayerColor::RED, 9, 0, true, 1000, quanxe1);
+    //board.grid[9][8] = new Rock(PlayerColor::RED, 9, 8, true, 1000, quanxe);
+    //board.grid[7][1] = new Cannon(PlayerColor::RED, 7, 1, true, 500, quanphao1);
+    //board.grid[7][7] = new Cannon(PlayerColor::RED, 7, 7, true, 500, quanphao);
+    //board.grid[6][0] = new Pawn(PlayerColor::RED, 6, 0, true, 100, quantot);
+    //board.grid[6][2] = new Pawn(PlayerColor::RED, 6, 2, true, 100, quantot1);
+    //board.grid[6][4] = new Pawn(PlayerColor::RED, 6, 4, true, 100, quantot2);
+    //board.grid[6][6] = new Pawn(PlayerColor::RED, 6, 6, true, 100, quantot3);
+    //board.grid[6][8] = new Pawn(PlayerColor::RED, 6, 8, true, 100, quantot4);
    
     sf::Vector2u size = quanxeden.getSize();
     sf::Sprite test(quanvuado);
@@ -146,44 +170,103 @@ int main() {
     };
     diem.setFillColor(sf::Color::Red);
     
-    for (int i = 0; i < 10; i++)
-    {
-        for (int j = 0; j < 9; j++)
-        {
-            if (board.grid[i][j] != nullptr)
-            {
-				board.grid[i][j]->sprite.setPosition({PosBoard[i][j].x - size.x/2,PosBoard[i][j].y-size.y/2});
-               
-            }
-
-        }
-    }
+   
 
     sf::Vector2f mousePos;
    
 
-
-
+    int a = 1, b = 2;
+    int passs = 0;
 
 
     sf::CircleShape node(38);
-    
     sf::CircleShape node1(10);
+    node1.setFillColor(sf::Color::Transparent);
     Piece* selectedPiece = nullptr;
     std::vector<sf::CircleShape> dots;
     bool pass = false;
 	std::pair <int, int> move;
+    int choigame = 0;
     while (window.isOpen()) {
         while (auto event = window.pollEvent()) {   
             if (event->is<sf::Event::Closed>()) {
                 window.close();
             }
 
+            if (event->is<sf::Event::MouseButtonPressed>()) {
+                auto mouse = event->getIf<sf::Event::MouseButtonPressed>();
+                mousePos = window.mapPixelToCoords(mouse->position);
+                if (mouse->button == sf::Mouse::Button::Left) {
+                    // click chuot trai vao quan xe
+                    if (nutchoigamee.getGlobalBounds().contains(mousePos))
+                    {
+                        choigame = 1;
+                        
+                    }
+                    if (trolaii.getGlobalBounds().contains(mousePos))
+                    {
+                        node1.setFillColor(sf::Color::Transparent);
 
-            // Nhấn chuột
+                        node.setOutlineColor(sf::Color::Transparent);
+                        board.undo();
+                        board.undo();
+                    }
+                    //thoat game
+                    if (thoatgamee.getGlobalBounds().contains(mousePos))
+                    {
+                        choigame = 0;
+						board.clear();
+                    }
+                    /// set lai ban co
+                    if (choilaii.getGlobalBounds().contains(mousePos)) {
+                        board.clear();
+						board.history.clear();
+                        node1.setFillColor(sf::Color::Transparent);
+
+                        node.setOutlineColor(sf::Color::Transparent);
+                        board.grid[0][4] = new General(PlayerColor::BLACK, 0, 4, true, 10000, quanvuad);
+                        board.grid[0][3] = new Advisor(PlayerColor::BLACK, 0, 3, true, 250, quansid);
+                        board.grid[0][5] = new Advisor(PlayerColor::BLACK, 0, 5, true, 250, quansid1);
+                        board.grid[0][2] = new Elephant(PlayerColor::BLACK, 0, 2, true, 250, quantuongd1);
+                        board.grid[0][6] = new Elephant(PlayerColor::BLACK, 0, 6, true, 250, quantuongd);
+                        board.grid[0][1] = new Knight(PlayerColor::BLACK, 0, 1, true, 400, quanmad);
+                        board.grid[0][7] = new Knight(PlayerColor::BLACK, 0, 7, true, 400, quanmad1);
+                        board.grid[0][0] = new Rock(PlayerColor::BLACK, 0, 0, true, 1000, quanxed);
+                        board.grid[0][8] = new Rock(PlayerColor::BLACK, 0, 8, true, 1000, quanxed1);
+                        board.grid[2][1] = new Cannon(PlayerColor::BLACK, 2, 1, true, 500, quanphaod);
+                        board.grid[2][7] = new Cannon(PlayerColor::BLACK, 2, 7, true, 500, quanphaod1);
+                        board.grid[3][0] = new Pawn(PlayerColor::BLACK, 3, 0, true, 100, quantotd);
+                        board.grid[3][2] = new Pawn(PlayerColor::BLACK, 3, 2, true, 100, quantotd1);
+                        board.grid[3][4] = new Pawn(PlayerColor::BLACK, 3, 4, true, 100, quantotd2);
+                        board.grid[3][6] = new Pawn(PlayerColor::BLACK, 3, 6, true, 100, quantotd3);
+                        board.grid[3][8] = new Pawn(PlayerColor::BLACK, 3, 8, true, 100, quantotd4);
+
+                        // phe den
+
+
+                        board.grid[9][4] = new General(PlayerColor::RED, 9, 4, true, 10000, quanvua);
+                        board.grid[9][3] = new Advisor(PlayerColor::RED, 9, 3, true, 250, quansi1);
+                        board.grid[9][5] = new Advisor(PlayerColor::RED, 9, 5, true, 250, quansi);
+                        board.grid[9][2] = new Elephant(PlayerColor::RED, 9, 2, true, 250, quantuong);
+                        board.grid[9][6] = new Elephant(PlayerColor::RED, 9, 6, true, 250, quantuong1);
+                        board.grid[9][1] = new Knight(PlayerColor::RED, 9, 1, true, 400, quanma1);
+                        board.grid[9][7] = new Knight(PlayerColor::RED, 9, 7, true, 400, quanma);
+                        board.grid[9][0] = new Rock(PlayerColor::RED, 9, 0, true, 1000, quanxe1);
+                        board.grid[9][8] = new Rock(PlayerColor::RED, 9, 8, true, 1000, quanxe);
+                        board.grid[7][1] = new Cannon(PlayerColor::RED, 7, 1, true, 500, quanphao1);
+                        board.grid[7][7] = new Cannon(PlayerColor::RED, 7, 7, true, 500, quanphao);
+                        board.grid[6][0] = new Pawn(PlayerColor::RED, 6, 0, true, 100, quantot);
+                        board.grid[6][2] = new Pawn(PlayerColor::RED, 6, 2, true, 100, quantot1);
+                        board.grid[6][4] = new Pawn(PlayerColor::RED, 6, 4, true, 100, quantot2);
+                        board.grid[6][6] = new Pawn(PlayerColor::RED, 6, 6, true, 100, quantot3);
+                        board.grid[6][8] = new Pawn(PlayerColor::RED, 6, 8, true, 100, quantot4);
+                    }
+                }
+            }
+           
             if (board.currentPlayer == PlayerColor::RED){
                  node.setFillColor(sf::Color::Transparent);
-                // node1.setFillColor(sf::Color::Transparent);
+                
                 if (event->is<sf::Event::MouseButtonPressed>()) {
                     auto mouse = event->getIf<sf::Event::MouseButtonPressed>();
                     mousePos = window.mapPixelToCoords(mouse->position);
@@ -198,9 +281,13 @@ int main() {
 
                         for (auto& dot : dots) {
                             if (dot.getGlobalBounds().contains(mousePos) && selectedPiece) {
-                                board.movePiece(move.first, move.second, lamtron(dot.getPosition().y) / 100 - 1, lamtron(dot.getPosition().x) / 100 - 1);
-
-                                selectedPiece->sprite.setPosition({ static_cast<float>(dot.getPosition().x - size.x / 2 + 10),static_cast<float>(dot.getPosition().y - size.y / 2 + 10) });
+                                if (board.movePiece(move.first, move.second, lamtron(dot.getPosition().y) / 100 - 1, lamtron(dot.getPosition().x) / 100 - 1))
+                                    passs = 1;
+                                
+								 a = lamtron(dot.getPosition().y) / 100 - 1;
+								 b = lamtron(dot.getPosition().x) / 100 - 1;
+                                 std::cout << a << b;
+                              
                                 board.printBoard();
                                 selectedPiece->sprite.setColor(sf::Color::White);
                                 selectedPiece = nullptr;
@@ -295,14 +382,16 @@ int main() {
                 }
 
 
-
+              
             }
-            else {
-                Move move = board.findBestMove(4);
+           else {
+                Move move = board.findBestMove(5);
                 board.movePiece(move.fromX, move.fromY, move.toX, move.toY);
+				 a = move.toX;
+				 b = move.toY;
                 std::cout << "AI di chuyen tu (" << move.fromX << ", " << move.fromY << ") den (" << move.toX << ", " << move.toY << ")\n";
                 std::cout << PosBoard[move.toX][move.toY].x << " " << PosBoard[move.toX][move.toY].y << "\n";
-                board.grid[move.toX][move.toY]->sprite.setPosition({ PosBoard[move.toX][move.toY].x - size.x / 2, PosBoard[move.toX][move.toY].y - size.y / 2 });
+             
                 node1.setFillColor(sf::Color::Yellow);
                 node.setOutlineThickness(2);
                 node.setOutlineColor(sf::Color::Red);
@@ -313,16 +402,25 @@ int main() {
 
                 node1.setPosition({ PosBoard[move.fromX][move.fromY].x - bankinh1 ,PosBoard[move.fromX][move.fromY].y - bankinh1 });
 
-
+               
             }
+            
+            
+            if (board.isGeneralFacing())
+            {
+				std::cout << "Chieu tuong\n";
+            }
+              
         }
 
         window.clear();
 		window.draw(boardSprite);
-        for(int i = 0 ;i<10;i++)
-            for(int j=0;j<9;j++)
-                if(board.grid[i][j]!=nullptr)
-					window.draw(board.grid[i][j]->sprite);
+        for (int i = 0; i < 10; i++)
+            for (int j = 0; j < 9; j++)
+                if (board.grid[i][j] != nullptr) {
+                    board.grid[i][j]->sprite.setPosition({ PosBoard[i][j].x - size.x / 2,PosBoard[i][j].y - size.y / 2 });
+                    window.draw(board.grid[i][j]->sprite);
+                }
         for (auto& dot : dots)
         {
             window.draw(dot);
@@ -336,7 +434,23 @@ int main() {
        }
         window.draw(node);
         window.draw(node1);
+        window.draw(trolaii);
+        window.draw(choilaii);
+		window.draw(thoatgamee);
+        if (board.checkMate(a,b) )
+		{
+            
+                window.draw(checkmatee);
+            
+           
+
+        }
+        if (choigame == 0) {
+            window.draw(sanhchoo);
+            window.draw(nutchoigamee);
+        }
         window.display();
+        
     }
 
     return 0;

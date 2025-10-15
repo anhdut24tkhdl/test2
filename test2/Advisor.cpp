@@ -35,3 +35,8 @@ void Advisor::updatePoint(int x, int y)
     if ((x == 8 && y == 4) || (x == 7 && (y == 3 || y == 5)))
         this->Point += 10;
 }
+int Advisor::getsymbolvalue() const
+{
+    if (this->getSymbol() == "RA") return 7;
+    else return 0;
+}

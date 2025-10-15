@@ -30,3 +30,9 @@ void Knight::updatePoint(int x, int y)
     
     if (y == 0 || y == 8) this->Point -= 15;
 }
+int Knight::getsymbolvalue() const
+{
+    if (getSymbol() == "RK") return 11;
+    else return 4;
+
+}

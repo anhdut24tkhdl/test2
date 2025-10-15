@@ -27,6 +27,7 @@ public:
     int getY() const;
     virtual void updatePoint(int x, int y) {};
 	int getPoint() const { return Point; }
+    virtual int getsymbolvalue() const = 0 ;
 };
 
 #endif

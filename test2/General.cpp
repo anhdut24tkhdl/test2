@@ -27,3 +27,9 @@ void General::updatePoint(int x, int y)
     if (y == 3 || y == 5) this->Point += 20;
     if (y == 4) this->Point += 30;
 }
+int General::getsymbolvalue() const
+{
+    if (getSymbol() == "RG") return 10;
+    else return 3;
+
+}

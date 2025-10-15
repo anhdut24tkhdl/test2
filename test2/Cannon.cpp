@@ -45,6 +45,12 @@ void Cannon::updatePoint(int x, int y)
 {
     
     
-    if (y >= 2 && y <= 6) this->Point += 10;
-    if (x >= 3 && x <= 6) this->Point += 10;
+    if (y >= 2 && y <= 6) this->Point += 40;
+    if (x >= 3 && x <= 6) this->Point += 30;
+}
+int Cannon::getsymbolvalue() const
+{
+    if (getSymbol() == "RC") return 8;
+    else return 1;
+
 }

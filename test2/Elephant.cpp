@@ -27,11 +27,17 @@ std::string Elephant::getSymbol() const {
 }
 void Elephant::updatePoint(int x, int y)
 {
-    this->Point = 120; 
+    
    
-    if (this->color == PlayerColor::RED && x >= 5) this->Point = 0;
-    if (this->color == PlayerColor::BLACK && x <= 4) this->Point = 0;
+    if (this->color == PlayerColor::RED && x >= 5) this->Point += 0;
+    if (this->color == PlayerColor::BLACK && x <= 4) this->Point += 0;
 
     if (y == 2 || y == 6) this->Point += 5;
     if (x == 2 || x == 7) this->Point += 5;
+}
+int Elephant::getsymbolvalue() const
+{
+    if (getSymbol() == "RE") return 9;
+    else return 2;
+
 }

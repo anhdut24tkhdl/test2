@@ -17,7 +17,7 @@ public :
 	Move Top();
 	int IsEmpty();
 	int IsFull();
-
+	void clear() { top = -1; }
 		
 };
 

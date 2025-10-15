@@ -51,3 +51,9 @@ void Pawn::updatePoint(int x, int y)
 		}
     }
 }
+int Pawn::getsymbolvalue() const
+{
+    if (getSymbol() == "RP") return 12;
+    else return 5;
+
+}
