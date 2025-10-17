@@ -5,9 +5,9 @@
 #include <cstdint>
 
 enum TT_Flag {
-    EXACT = 0,      // Giá trị chính xác (minimax fully evaluated)
-    LOWERBOUND = 1, // Giá trị thấp hơn beta (fail-high)
-    UPPERBOUND = -1 // Giá trị cao hơn alpha (fail-low)
+    EXACT = 0,      
+    LOWERBOUND = 1, 
+    UPPERBOUND = -1 
 };
 
 struct HashEntry {
@@ -15,12 +15,11 @@ struct HashEntry {
     int depth;      // độ sâu minimax
     int value;      // giá trị minimax
     int flag;       // EXACT / LOWERBOUND / UPPERBOUND
-    //int bestMove;   // nước đi tốt nhất
 };
 
 class TranspositionTable {
 private:
-    const int TABLE_SIZE = 1 << 22; // 1 triệu ô
+    const int TABLE_SIZE = 1 << 25; // 1 triệu ô
     HashEntry* table;
 
     uint64_t hashFunction(uint64_t key) const;

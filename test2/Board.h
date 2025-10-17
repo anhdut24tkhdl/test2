@@ -25,11 +25,11 @@ public:
     Piece* grid[10][9];
     Board();
     ~Board();
-	Stack history = Stack(100); 
+	Stack history = Stack(200); 
 
     void initializePieces();       // Khởi tạo vị trí quân cờ   
-    bool movePiece(int fromX, int fromY, int toX, int toY); // Di chuyển quân cờ
-    std::vector<std::pair<int, int>> getAllPossibleMoves(int x, int y) const; // Lấy tất cả các nước đi hợp lệ cho quân cờ tại (x, y)
+    bool movePiece(const int &, const int&,  const int& , const int& ); // Di chuyển quân cờ
+    std::vector<std::pair<int, int>> getAllPossibleMoves(const int &,const  int &) const; // Lấy tất cả các nước đi hợp lệ cho quân cờ tại (x, y)
 	void printBoard() const;
     int minimax(int ,int , int , bool );
 	bool isGameover() const;
@@ -42,6 +42,6 @@ public:
     void clear();
 	bool Luatnuocdidung(PlayerColor color) ;
 	int getXgeneral(PlayerColor color);
-    std::vector<std::pair<int, int>> getAllPossibleMoves1(int x, int y) ; // Lấy tất cả các nước đi hợp lệ cho quân cờ tại (x, y)
+    std::vector<std::pair<int, int>> getAllPossibleMoves1( int ,  int ) ; // Lấy tất cả các nước đi hợp lệ cho quân cờ tại (x, y)
 	bool isGeneralFacing() const;
 };

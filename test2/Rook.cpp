@@ -1,7 +1,7 @@
 ﻿#pragma once﻿
 #include "Rook.h"
 
-Rock::Rock(PlayerColor c, int x, int y, bool alive, int p, const sf::Sprite sprite) : Piece(c, x, y, alive, p,sprite) {}
+Rock::Rock(const PlayerColor& c, const int& x, const int& y, const bool& alive, const int& p, const sf::Sprite& sprite) : Piece(c, x, y, alive, p,sprite) {}
 bool Rock::isValidMove(int toX, int toY, Piece* grid[10][9]) const {
     if (toX < 0 || toX > 9 || toY < 0 || toY > 8) return false;
     int dx = toX - x;
@@ -44,12 +44,12 @@ bool Rock::isValidMove(int toX, int toY, Piece* grid[10][9]) const {
 std::string Rock::getSymbol() const {
     return (color == PlayerColor::RED) ? "RK" : "BK";
 }
-void Rock::updatePoint(int x, int y)
-{
-   
-    if (y >= 3 && y <= 5) this->Point += 35;
-    if (x >= 3 && x <= 6) this->Point += 35;
-}
+//void Rock::updatePoint(int x, int y)
+//{
+//   
+//    if (y >= 3 && y <= 5) this->Point += 35;
+//    if (x >= 3 && x <= 6) this->Point += 35;
+//}
 int Rock::getsymbolvalue() const
 {
     if (getSymbol() == "RR") return 13;

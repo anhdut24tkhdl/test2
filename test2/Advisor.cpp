@@ -2,7 +2,7 @@
 #include "Advisor.h"
 
 
-Advisor::Advisor(PlayerColor c, int x, int y, bool alive, int p, const sf::Sprite sprite) : Piece(c, x, y, alive, p,sprite) {
+Advisor::Advisor(const PlayerColor &c, const int &x, const int &y, const bool &alive, const int &p, const sf::Sprite &sprite) : Piece(c, x, y, alive, p,sprite) {
 
    
 }
@@ -22,19 +22,13 @@ bool Advisor::isValidMove(int toX, int toY, Piece* grid[10][9]) const {
 std::string Advisor::getSymbol() const {
     return (color == PlayerColor::RED) ? "RA" : "BA";
 }
-void Advisor::updatePoint(int x, int y)
-{
-    
-    
-    if (this->color == PlayerColor::RED && (x < 7 || y < 3 || y > 5))
-        this->Point = 0;
-    if (this->color == PlayerColor::BLACK && (x > 2 || y < 3 || y > 5))
-        this->Point = 0;
-
-    
-    if ((x == 8 && y == 4) || (x == 7 && (y == 3 || y == 5)))
-        this->Point += 10;
-}
+//void Advisor::updatePoint(int x, int y)
+//{
+//    
+//
+//    if ((x == 8 && y == 4) || (x == 7 && (y == 3 || y == 5)))
+//        this->Point += 10;
+//}
 int Advisor::getsymbolvalue() const
 {
     if (this->getSymbol() == "RA") return 7;

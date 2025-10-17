@@ -3,6 +3,7 @@
 #include"Board.h"
 #include<random>
 #include<ctime>
+#include<thread>
 //#include "Piece.h"
 int lamtron(int x)
 {
@@ -44,7 +45,7 @@ int main() {
 	sanhcho.loadFromFile("sanhcho.png");
 	thoatgame.loadFromFile("quanxeden.png");
     choilai.loadFromFile("quanxeden.png");
-    trolai.loadFromFile("quanxeden.png");
+    trolai.loadFromFile("nutquaylai.png");
 	checkmate.loadFromFile("checkmate.png");
 	youlose.loadFromFile("youlose.png");
     quanxeden.loadFromFile("quanxeden.png");
@@ -110,44 +111,7 @@ int main() {
     choilaii.setPosition({ 1000 , 900 });
 	thoatgamee.setPosition({ 1000 , 800 });
 	nutchoigamee.setPosition({ 150,700 });
-    // phe do
-
-    //board.grid[0][4] = new General(PlayerColor::BLACK, 0, 4, true, 10000, quanvuad);
-    //board.grid[0][3] = new Advisor(PlayerColor::BLACK, 0, 3, true, 250, quansid);
-    //board.grid[0][5] = new Advisor(PlayerColor::BLACK, 0, 5, true, 250, quansid1);
-    //board.grid[0][2] = new Elephant(PlayerColor::BLACK, 0, 2, true, 250, quantuongd1);
-    //board.grid[0][6] = new Elephant(PlayerColor::BLACK, 0, 6, true, 250, quantuongd);
-    //board.grid[0][1] = new Knight(PlayerColor::BLACK, 0, 1, true, 400, quanmad);
-    //board.grid[0][7] = new Knight(PlayerColor::BLACK, 0, 7, true, 400, quanmad1);
-    //board.grid[0][0] = new Rock(PlayerColor::BLACK, 0, 0, true, 1000, quanxed);
-    //board.grid[0][8] = new Rock(PlayerColor::BLACK, 0, 8, true, 1000, quanxed1);
-    //board.grid[2][1] = new Cannon(PlayerColor::BLACK, 2, 1, true, 500, quanphaod);
-    //board.grid[2][7] = new Cannon(PlayerColor::BLACK, 2, 7, true, 500, quanphaod1);
-    //board.grid[3][0] = new Pawn(PlayerColor::BLACK, 3, 0, true, 100, quantotd);
-    //board.grid[3][2] = new Pawn(PlayerColor::BLACK, 3, 2, true, 100, quantotd1);
-    //board.grid[3][4] = new Pawn(PlayerColor::BLACK, 3, 4, true, 100, quantotd2);
-    //board.grid[3][6] = new Pawn(PlayerColor::BLACK, 3, 6, true, 100, quantotd3);
-    //board.grid[3][8] = new Pawn(PlayerColor::BLACK, 3, 8, true, 100, quantotd4);
-
-    //// phe den
-
-
-    //board.grid[9][4] = new General(PlayerColor::RED, 9, 4, true, 10000, quanvua);
-    //board.grid[9][3] = new Advisor(PlayerColor::RED, 9, 3, true, 250, quansi1);
-    //board.grid[9][5] = new Advisor(PlayerColor::RED, 9, 5, true, 250, quansi);
-    //board.grid[9][2] = new Elephant(PlayerColor::RED, 9, 2, true, 250, quantuong);
-    //board.grid[9][6] = new Elephant(PlayerColor::RED, 9, 6, true, 250, quantuong1);
-    //board.grid[9][1] = new Knight(PlayerColor::RED, 9, 1, true, 400, quanma1);
-    //board.grid[9][7] = new Knight(PlayerColor::RED, 9, 7, true, 400, quanma);
-    //board.grid[9][0] = new Rock(PlayerColor::RED, 9, 0, true, 1000, quanxe1);
-    //board.grid[9][8] = new Rock(PlayerColor::RED, 9, 8, true, 1000, quanxe);
-    //board.grid[7][1] = new Cannon(PlayerColor::RED, 7, 1, true, 500, quanphao1);
-    //board.grid[7][7] = new Cannon(PlayerColor::RED, 7, 7, true, 500, quanphao);
-    //board.grid[6][0] = new Pawn(PlayerColor::RED, 6, 0, true, 100, quantot);
-    //board.grid[6][2] = new Pawn(PlayerColor::RED, 6, 2, true, 100, quantot1);
-    //board.grid[6][4] = new Pawn(PlayerColor::RED, 6, 4, true, 100, quantot2);
-    //board.grid[6][6] = new Pawn(PlayerColor::RED, 6, 6, true, 100, quantot3);
-    //board.grid[6][8] = new Pawn(PlayerColor::RED, 6, 8, true, 100, quantot4);
+	
    
     sf::Vector2u size = quanxeden.getSize();
     sf::Sprite test(quanvuado);
@@ -177,8 +141,16 @@ int main() {
 
     int a = 1, b = 2;
     int passs = 0;
+    // hiệu ứng 
+    sf::Vector2f startPos = quanma.getPosition();
+    sf::Vector2f endPos = sf::Vector2f(400.f, 200.f); // vị trí đích
 
+    float moveDuration = 0.3f; // thời gian bay (giây)
+    float elapsed = 0.f;
 
+    sf::Clock clock;
+    bool moving = true;
+    //
     sf::CircleShape node(38);
     sf::CircleShape node1(10);
     node1.setFillColor(sf::Color::Transparent);
@@ -187,12 +159,59 @@ int main() {
     bool pass = false;
 	std::pair <int, int> move;
     int choigame = 0;
+	bool vaogame = false;
     while (window.isOpen()) {
         while (auto event = window.pollEvent()) {   
             if (event->is<sf::Event::Closed>()) {
                 window.close();
             }
+            if (event->is<sf::Event::MouseMoved>())
+            {
+                auto mouse = event->getIf<sf::Event::MouseMoved>();
+                mousePos = window.mapPixelToCoords(mouse->position);
+                
+                if (nutchoigamee.getGlobalBounds().contains(mousePos))
+                {
+                    nutchoigamee.setScale({ 1.1, 1.1 });
+                    
+                }
+                else
+                {
+                    nutchoigamee.setScale({ 1, 1 });
+                    
+                }
 
+                if (trolaii.getGlobalBounds().contains(mousePos))
+                {
+                    trolaii.setScale({ 0.17, 0.17 });
+
+                }
+                else
+                {
+                    trolaii.setScale({ 0.15, 0.15 });
+
+                }
+                if (choilaii.getGlobalBounds().contains(mousePos))
+                {
+                    choilaii.setScale({ 1.1, 1.1 });
+
+                }
+                else
+                {
+                    choilaii.setScale({ 1, 1 });
+
+                }
+                if (thoatgamee.getGlobalBounds().contains(mousePos))
+                {
+                    thoatgamee.setScale({ 1.1, 1.1 });
+
+                }
+                else
+                {
+                    thoatgamee.setScale({ 1, 1 });
+
+                }
+            }
             if (event->is<sf::Event::MouseButtonPressed>()) {
                 auto mouse = event->getIf<sf::Event::MouseButtonPressed>();
                 mousePos = window.mapPixelToCoords(mouse->position);
@@ -201,6 +220,7 @@ int main() {
                     if (nutchoigamee.getGlobalBounds().contains(mousePos))
                     {
                         choigame = 1;
+						
                         
                     }
                     if (trolaii.getGlobalBounds().contains(mousePos))
@@ -214,11 +234,13 @@ int main() {
                     //thoat game
                     if (thoatgamee.getGlobalBounds().contains(mousePos))
                     {
+                        vaogame = false;
                         choigame = 0;
 						board.clear();
                     }
                     /// set lai ban co
                     if (choilaii.getGlobalBounds().contains(mousePos)) {
+                        vaogame = true;
                         board.clear();
 						board.history.clear();
                         node1.setFillColor(sf::Color::Transparent);
@@ -263,8 +285,29 @@ int main() {
                     }
                 }
             }
-           
-            if (board.currentPlayer == PlayerColor::RED){
+            if(board.currentPlayer == PlayerColor::BLACK) {
+
+               
+                Move move = board.findBestMove(6);
+                board.movePiece(move.fromX, move.fromY, move.toX, move.toY);
+                a = move.toX;
+                b = move.toY;
+                std::cout << "AI di chuyen tu (" << move.fromX << ", " << move.fromY << ") den (" << move.toX << ", " << move.toY << ")\n";
+                std::cout << PosBoard[move.toX][move.toY].x << " " << PosBoard[move.toX][move.toY].y << "\n";
+
+                node1.setFillColor(sf::Color::Yellow);
+                node.setOutlineThickness(2);
+                node.setOutlineColor(sf::Color::Red);
+                int bankinh = node.getRadius();
+                int bankinh1 = node1.getRadius();
+                node.setPosition({ PosBoard[move.toX][move.toY].x - bankinh ,PosBoard[move.toX][move.toY].y - bankinh
+                    });
+
+                node1.setPosition({ PosBoard[move.fromX][move.fromY].x - bankinh1 ,PosBoard[move.fromX][move.fromY].y - bankinh1 });
+
+
+            }
+            else{
                  node.setFillColor(sf::Color::Transparent);
                 
                 if (event->is<sf::Event::MouseButtonPressed>()) {
@@ -288,7 +331,7 @@ int main() {
 								 b = lamtron(dot.getPosition().x) / 100 - 1;
                                  std::cout << a << b;
                               
-                                board.printBoard();
+                                //board.printBoard();
                                 selectedPiece->sprite.setColor(sf::Color::White);
                                 selectedPiece = nullptr;
                                 dots.clear();
@@ -384,32 +427,11 @@ int main() {
 
               
             }
-           else {
-                Move move = board.findBestMove(5);
-                board.movePiece(move.fromX, move.fromY, move.toX, move.toY);
-				 a = move.toX;
-				 b = move.toY;
-                std::cout << "AI di chuyen tu (" << move.fromX << ", " << move.fromY << ") den (" << move.toX << ", " << move.toY << ")\n";
-                std::cout << PosBoard[move.toX][move.toY].x << " " << PosBoard[move.toX][move.toY].y << "\n";
-             
-                node1.setFillColor(sf::Color::Yellow);
-                node.setOutlineThickness(2);
-                node.setOutlineColor(sf::Color::Red);
-                int bankinh = node.getRadius();
-                int bankinh1 = node1.getRadius();
-                node.setPosition({ PosBoard[move.toX][move.toY].x - bankinh ,PosBoard[move.toX][move.toY].y - bankinh
-                    });
 
-                node1.setPosition({ PosBoard[move.fromX][move.fromY].x - bankinh1 ,PosBoard[move.fromX][move.fromY].y - bankinh1 });
-
-               
-            }
+           
             
             
-            if (board.isGeneralFacing())
-            {
-				std::cout << "Chieu tuong\n";
-            }
+          
               
         }
 
@@ -425,7 +447,7 @@ int main() {
         {
             window.draw(dot);
         }
-        if (board.isGameover())
+        if (board.isGameover() && vaogame == true)
        {
 			
 			sf::Sprite lose(youlose);
@@ -437,7 +459,7 @@ int main() {
         window.draw(trolaii);
         window.draw(choilaii);
 		window.draw(thoatgamee);
-        if (board.checkMate(a,b) )
+        if (board.checkMate(a,b) && vaogame )
 		{
             
                 window.draw(checkmatee);

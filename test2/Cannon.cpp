@@ -1,7 +1,7 @@
 ﻿#pragma once﻿
 #include "Cannon.h"
 
-Cannon::Cannon(PlayerColor c, int x, int y, bool alive, int p, const sf::Sprite sprite) : Piece(c, x, y, alive, p,sprite) {}
+Cannon::Cannon(const PlayerColor& c, const int& x, const int& y, const bool& alive, const int& p, const sf::Sprite& sprite) : Piece(c, x, y, alive, p,sprite) {}
 
 bool Cannon::isValidMove(int toX, int toY, Piece* grid[10][9]) const {
 
@@ -41,13 +41,13 @@ bool Cannon::isValidMove(int toX, int toY, Piece* grid[10][9]) const {
 std::string Cannon::getSymbol() const {
     return (color == PlayerColor::RED) ? "RC" : "BC";
 }
-void Cannon::updatePoint(int x, int y)
-{
-    
-    
-    if (y >= 2 && y <= 6) this->Point += 40;
-    if (x >= 3 && x <= 6) this->Point += 30;
-}
+//void Cannon::updatePoint(int x, int y)
+//{
+//    
+//    
+//    if (y >= 2 && y <= 6) this->Point += 40;
+//    if (x >= 3 && x <= 6) this->Point += 30;
+//}
 int Cannon::getsymbolvalue() const
 {
     if (getSymbol() == "RC") return 8;

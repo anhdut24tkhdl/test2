@@ -2,7 +2,7 @@
 #include "Pawn.h"
 
 
-Pawn::Pawn(PlayerColor c, int x, int y, bool alive, int p, const sf::Sprite sprite) : Piece(c, x, y, alive, p,sprite) {}
+Pawn::Pawn(const PlayerColor& c, const int& x, const int& y, const bool& alive, const int& p, const sf::Sprite& sprite) : Piece(c, x, y, alive, p,sprite) {}
 
 bool Pawn::isValidMove(int toX, int toY, Piece* grid[10][9])  const {
     if (toX < 0 || toX > 9 || toY < 0 || toY > 8) return false;
@@ -32,25 +32,25 @@ bool Pawn::isValidMove(int toX, int toY, Piece* grid[10][9])  const {
 std::string Pawn::getSymbol() const {
     return(color == PlayerColor::RED) ? "RP" : "BP";
 }
-void Pawn::updatePoint(int x, int y)
-{
-    if (this->color == PlayerColor::RED)
-    {
-		if (x == 6) this->Point += 10;
-        if (x < 6) {
-            for(int i = x ; i>0;i--)
-				this->Point += 20;
-                   }
-    }
-    else
-    {
-		if (x == 4) this->Point += 5;
-        if (x > 4) {
-            
-                this->Point += 10;
-		}
-    }
-}
+//void Pawn::updatePoint(int x, int y)
+//{
+//    if (this->color == PlayerColor::RED)
+//    {
+//		if (x == 6) this->Point += 10;
+//        if (x < 6) {
+//            for(int i = x ; i>0;i--)
+//				this->Point += 20;
+//                   }
+//    }
+//    else
+//    {
+//		if (x == 4) this->Point += 5;
+//        if (x > 4) {
+//            
+//                this->Point += 10;
+//		}
+//    }
+//}
 int Pawn::getsymbolvalue() const
 {
     if (getSymbol() == "RP") return 12;

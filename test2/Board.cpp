@@ -27,7 +27,7 @@
     }
 
 
-    bool Board::movePiece(int fromX, int fromY, int toX, int toY) {
+    bool Board::movePiece(const int &fromX, const int& fromY, const int& toX, const int &toY) {
         if (fromX < 0 || fromX > 9 || fromY < 0 || fromY > 8 ||
             toX < 0 || toX > 9 || toY < 0 || toY > 8) {
             return false;
@@ -66,7 +66,7 @@
         return true;
     }
     
-    std::vector<std::pair<int, int>> Board::getAllPossibleMoves(int x, int y) const
+    std::vector<std::pair<int, int>> Board::getAllPossibleMoves(const int &x, const int &y) const
     {
         std::vector<std::pair<int, int>> moves;
         if (x < 0 || x > 9 || y < 0 || y > 8) {
@@ -121,6 +121,7 @@
     }
 
     // lay quan co co piece
+
     std::vector<Move> Board::getAllPossibleMoves(PlayerColor color)
     {
         std::vector<Move> allMoves;
@@ -132,15 +133,7 @@
 				    
                     for(int k = 0; k < moves.size(); k++)
 				    {
-                        /*movePiece(i, j, moves[k].first, moves[k].second);
-                        for(int i = 0 ; i < 10 ; i++)
-                            for(int j = 0 ; j < 9 ; j++)
-                                if (grid[i][j] != nullptr && color != grid[i][j]->getColor())
-                                {
-									checkMate(i, j);
-
-                                }
-                        undo();*/
+                      
                         Move move;
                         move.fromX = i;
                         move.fromY = j;
@@ -316,6 +309,7 @@
     }
     bool Board::checkMate(int x, int y)
     {
+        
         for (auto& m : getAllPossibleMoves(x, y))
         {
             Piece* target = grid[m.first][m.second];
