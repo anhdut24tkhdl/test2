@@ -22,11 +22,12 @@ bool General::isValidMove(int toX, int toY, Piece* grid[10][9]) const {
 std::string General::getSymbol() const {
     return (color == PlayerColor::RED) ? "RG" : "BG";
 }
-//void General::updatePoint(int x, int y)
-//{
-//    if (y == 3 || y == 5) this->Point += 20;
-//    if (y == 4) this->Point += 30;
-//}
+void General::updatePoint(int x, int y)
+{
+	this->Point = 10000;
+    if (y == 3 || y == 5) this->Point += 20;
+    if (y == 4) this->Point += 30;
+}
 int General::getsymbolvalue() const
 {
     if (getSymbol() == "RG") return 10;

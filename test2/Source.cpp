@@ -288,7 +288,7 @@ int main() {
             if(board.currentPlayer == PlayerColor::BLACK) {
 
                
-                Move move = board.findBestMove(6);
+                Move move = board.findBestMove(5);
                 board.movePiece(move.fromX, move.fromY, move.toX, move.toY);
                 a = move.toX;
                 b = move.toY;

@@ -44,12 +44,12 @@ bool Rock::isValidMove(int toX, int toY, Piece* grid[10][9]) const {
 std::string Rock::getSymbol() const {
     return (color == PlayerColor::RED) ? "RK" : "BK";
 }
-//void Rock::updatePoint(int x, int y)
-//{
-//   
-//    if (y >= 3 && y <= 5) this->Point += 35;
-//    if (x >= 3 && x <= 6) this->Point += 35;
-//}
+void Rock::updatePoint(int x, int y)
+{
+    this->Point = 1000;
+    if (y >= 3 && y <= 5) this->Point += 20;
+    if (x >= 3 && x <= 6) this->Point += 20;
+}
 int Rock::getsymbolvalue() const
 {
     if (getSymbol() == "RR") return 13;

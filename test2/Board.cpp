@@ -180,6 +180,8 @@
             for (int j = 0; j < 9; ++j) {
                 Piece* p = grid[i][j];
                 if (p == nullptr) continue;
+				p->updatePoint(i, j);
+               // if (p->getSymbol()=="RC")
                 if (p->getColor() == PlayerColor::BLACK)
                     PointAI += p->getPoint();
                 else if (p->getColor() == PlayerColor::RED)
