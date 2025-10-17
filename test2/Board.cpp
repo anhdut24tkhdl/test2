@@ -175,19 +175,39 @@
     {
         int PointAI = 0;
         int PointPlayer = 0;
-
+        int BCx = -1;
+		int BCy = -1;
+		int RCx = -2;
+		int RCy = -2;
         for (int i = 0; i < 10; ++i) {
             for (int j = 0; j < 9; ++j) {
                 Piece* p = grid[i][j];
                 if (p == nullptr) continue;
 				p->updatePoint(i, j);
-               // if (p->getSymbol()=="RC")
+                if (p->getSymbol() == "BC")
+                {
+					BCx = i;
+					BCy = j;
+                }
+                if (p->getSymbol() == "RC")
+                {
+					RCx = i;
+					RCy = j;
+                }
+               
+                
+                
                 if (p->getColor() == PlayerColor::BLACK)
                     PointAI += p->getPoint();
                 else if (p->getColor() == PlayerColor::RED)
                     PointPlayer += p->getPoint();
             }
         }
+        if (RCx == BCx || RCy == BCy)
+        {
+            PointAI += 20;
+        }
+		
         return PointAI - PointPlayer;
     }
 
@@ -207,7 +227,7 @@
         if (lastMove.capturedPiece)
             lastMove.capturedPiece->setPosition(lastMove.toX, lastMove.toY);
 
-        // Hoàn nguyên lượt chơi
+       
         currentPlayer = (currentPlayer == PlayerColor::RED) ? PlayerColor::BLACK : PlayerColor::RED;
     }
   
