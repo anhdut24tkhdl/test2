@@ -25,7 +25,7 @@ public:
     void setPosition(int newX, int newY);
     int getX() const;
     int getY() const;
-    virtual void updatePoint (int ,int) = 0;
+    virtual void updatePoint (const int& ,const int&) = 0;
 	int getPoint() const { return Point; }
     virtual int getsymbolvalue() const = 0 ;
 };

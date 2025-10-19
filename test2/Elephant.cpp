@@ -25,7 +25,7 @@ bool Elephant::isValidMove(int toX, int toY, Piece* grid[10][9]) const {
 std::string Elephant::getSymbol() const {
     return (color == PlayerColor::RED) ? "RE" : "BE";
 }
-void Elephant::updatePoint(int x, int y)
+void Elephant::updatePoint(const int&x, const int&y)
 {
     
 	this->Point = 250;

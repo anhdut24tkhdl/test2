@@ -32,7 +32,7 @@ bool Pawn::isValidMove(int toX, int toY, Piece* grid[10][9])  const {
 std::string Pawn::getSymbol() const {
     return(color == PlayerColor::RED) ? "RP" : "BP";
 }
-void Pawn::updatePoint(int x, int y)
+void Pawn::updatePoint(const int&x, const int&y)
 {
 	this->Point = 100;
     if (this->color == PlayerColor::RED) {

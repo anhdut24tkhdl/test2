@@ -21,7 +21,7 @@ bool Knight::isValidMove(int toX, int toY, Piece* grid[10][9]) const {
 std::string Knight::getSymbol() const {
     return (color == PlayerColor::RED) ? "RH" : "BH";
 }
-void Knight::updatePoint(int x, int y)
+void Knight::updatePoint(const int&x, const int&y)
 {
     
 	this->Point = 400;

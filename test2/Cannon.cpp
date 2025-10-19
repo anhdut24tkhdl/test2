@@ -41,7 +41,7 @@ bool Cannon::isValidMove(int toX, int toY, Piece* grid[10][9]) const {
 std::string Cannon::getSymbol() const {
     return (color == PlayerColor::RED) ? "RC" : "BC";
 }
-void Cannon::updatePoint(int x, int y)
+void Cannon::updatePoint(const int&x, const int&y)
 {
     
 	this->Point = 500;

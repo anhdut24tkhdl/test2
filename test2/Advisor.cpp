@@ -22,7 +22,7 @@ bool Advisor::isValidMove(int toX, int toY, Piece* grid[10][9]) const {
 std::string Advisor::getSymbol() const {
     return (color == PlayerColor::RED) ? "RA" : "BA";
 }
-void Advisor::updatePoint(int x, int y)
+void Advisor::updatePoint(const int &x, const int &y)
 {
     
     this->Point = 250;

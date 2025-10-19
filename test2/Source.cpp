@@ -1,10 +1,12 @@
-﻿#include <SFML/Audio.hpp>
+﻿
+// Creat by Nguyễn Đức Quang Ánh 24T_KHDL 2025 //
+#include <SFML/Audio.hpp>
 #include <optional>
 #include"Board.h"
 #include<random>
 #include<ctime>
 #include<thread>
-//#include "Piece.h"
+
 int lamtron(int x)
 {
     int rounded = round(x / 100.0) * 100;
@@ -12,13 +14,9 @@ int lamtron(int x)
 }
 int main() {
     sf::RenderWindow window(sf::VideoMode({ 1124, 1227 }), "China Chess");
-    /*  Game game;
-      game.start();*/
-      // tao am thanh
     Board board;
-
+	// tạo texture
     sf::Texture quanxeden;
-    quanxeden.setSmooth(1);
     sf::Texture quanxedo;
     sf::Texture bancotrong;
     sf::Texture quantuongden;
@@ -65,7 +63,7 @@ int main() {
     quanmado.loadFromFile("quanmado.png");
     bancotrong.loadFromFile("bancotrong.png");
     
-    //quan co do
+	// sprite quân cờ đỏ
 	sf::Sprite nutchoigamee(nutchoigame);
 	sf::Sprite boardSprite(bancotrong);
     sf::Sprite quantuong(quantuongdo);
@@ -84,7 +82,7 @@ int main() {
     sf::Sprite quanvua(quanvuado);
     sf::Sprite quanma(quanmado);
     sf::Sprite quanma1(quanmado);
-    //quan co den
+	//sprite quân cờ đen
     sf::Sprite quantuongd(quantuongden);
     sf::Sprite quantuongd1(quantuongden);
     sf::Sprite quanxed(quanxeden);
@@ -101,7 +99,7 @@ int main() {
     sf::Sprite quanvuad(quanvuaden);
     sf::Sprite quanmad(quanmaden);
     sf::Sprite quanmad1(quanmaden);
-    //ban co
+    //các tính năng bàn cờ
 	sf::Sprite checkmatee(checkmate);
     sf::Sprite trolaii(trolai);
     sf::Sprite choilaii(choilai);
@@ -119,7 +117,7 @@ int main() {
     sf::CircleShape diem(10);
     diem.setFillColor(sf::Color::Red);
    
-    //vi tri cac o tren bam co
+    //vị tri
     sf::Vector2f PosBoard[10][9] = {
      { {101,100}, {203,100},  {305,101}, {408,101}, {511,102}, {611,101}, {713,100}, {818,101}, {918,101} },
      { {100,202}, {202,202}, {305,204}, {408,203}, {511,203}, {613,204}, {716,203}, {817,203}, {922,203} },
@@ -287,24 +285,26 @@ int main() {
             }
             if(board.currentPlayer == PlayerColor::BLACK) {
 
-               
-                Move move = board.findBestMove(5);
-                board.movePiece(move.fromX, move.fromY, move.toX, move.toY);
-                a = move.toX;
-                b = move.toY;
-                std::cout << "AI di chuyen tu (" << move.fromX << ", " << move.fromY << ") den (" << move.toX << ", " << move.toY << ")\n";
-                std::cout << PosBoard[move.toX][move.toY].x << " " << PosBoard[move.toX][move.toY].y << "\n";
+                if (board.history.IsEmpty())
+                {
+                    board.movePiece(0, 1, 2, 2);
+                }
+                else {
+                    Move move = board.findBestMove(5);
+                    board.movePiece(move.fromX, move.fromY, move.toX, move.toY);
+                    a = move.toX;
+                    b = move.toY;
 
-                node1.setFillColor(sf::Color::Yellow);
-                node.setOutlineThickness(2);
-                node.setOutlineColor(sf::Color::Red);
-                int bankinh = node.getRadius();
-                int bankinh1 = node1.getRadius();
-                node.setPosition({ PosBoard[move.toX][move.toY].x - bankinh ,PosBoard[move.toX][move.toY].y - bankinh
-                    });
+                    node1.setFillColor(sf::Color::Yellow);
+                    node.setOutlineThickness(2);
+                    node.setOutlineColor(sf::Color::Red);
+                    int bankinh = node.getRadius();
+                    int bankinh1 = node1.getRadius();
+                    node.setPosition({ PosBoard[move.toX][move.toY].x - bankinh ,PosBoard[move.toX][move.toY].y - bankinh
+                        });
 
-                node1.setPosition({ PosBoard[move.fromX][move.fromY].x - bankinh1 ,PosBoard[move.fromX][move.fromY].y - bankinh1 });
-
+                    node1.setPosition({ PosBoard[move.fromX][move.fromY].x - bankinh1 ,PosBoard[move.fromX][move.fromY].y - bankinh1 });
+                }
 
             }
             else{

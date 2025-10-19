@@ -44,7 +44,7 @@ bool Rock::isValidMove(int toX, int toY, Piece* grid[10][9]) const {
 std::string Rock::getSymbol() const {
     return (color == PlayerColor::RED) ? "RK" : "BK";
 }
-void Rock::updatePoint(int x, int y)
+void Rock::updatePoint(const int&x, const int&y)
 {
     this->Point = 1000;
     if (y >= 3 && y <= 5) this->Point += 20;
