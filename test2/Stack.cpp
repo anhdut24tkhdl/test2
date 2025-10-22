@@ -18,7 +18,7 @@ int Stack::IsFull()
 {
 	return top == capacity - 1;
 }
-void Stack::Push(Move move )
+void Stack::Push(const Move &move )
 {
 	if (IsFull())
 		return;

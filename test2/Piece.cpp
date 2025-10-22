@@ -1,14 +1,13 @@
 ﻿#pragma once﻿
 #include "Piece.h"
 
-Piece::Piece(PlayerColor c, int x, int y, bool alive, int p,const sf::Sprite & sprite) : color(c), alive(alive), x(x), y(y), Point(p),sprite(sprite) {}
+Piece::Piece(const PlayerColor& c,const  int& x, const int& y,const  int& p, const bool& alive, const sf::Sprite & sprite) : color(c),  x(x), y(y), Point(p),alive(alive),sprite(sprite) {}
 
 Piece::~Piece() = default;
 
 PlayerColor Piece::getColor() const { return color; }
-void Piece::setPosition(int newX, int newY) { x = newX; y = newY; }
-int Piece::getX() const { return x; }
-int Piece::getY() const { return y; }
+void Piece::setPosition(const int &newX,const int& newY) { this->x = newX; this->y = newY; }
+
 
 
 

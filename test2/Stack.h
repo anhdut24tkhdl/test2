@@ -12,7 +12,7 @@ public :
 	Stack(const int& );
 	~Stack();
 	
-	void Push(Move move);
+	void Push(const Move& move);
 	Move Pop();
 	Move Top();
 	int IsEmpty();

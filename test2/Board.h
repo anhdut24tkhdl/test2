@@ -25,23 +25,29 @@ public:
     Piece* grid[10][9];
     Board();
     ~Board();
+    void khoitao();
 	Stack history = Stack(200); 
-
-    void initializePieces();       // Khởi tạo vị trí quân cờ   
+    Stack redon = Stack(10);
+    std::vector<Piece*> redPieces;
+    std::vector<Piece*> blackPieces;
     bool movePiece(const int &, const int&,  const int& , const int& ); // Di chuyển quân cờ
     std::vector<std::pair<int, int>> getAllPossibleMoves(const int &,const  int &) const; // Lấy tất cả các nước đi hợp lệ cho quân cờ tại (x, y)
 	void printBoard() const;
     int minimax(int ,int , int , bool );
 	bool isGameover() const;
-	std::vector<Move> getAllPossibleMoves(PlayerColor);
+	std::vector<Move> getAllPossibleMoves( PlayerColor);
     int EvaluatePoint( )const;
 	void undo();
-  
+    void redo(const Move &);
 	Move findBestMove(int depth);   
     bool checkMate(int x , int y );
     void clear();
 	bool Luatnuocdidung(PlayerColor color) ;
-	int getXgeneral(PlayerColor color);
-    std::vector<std::pair<int, int>> getAllPossibleMoves1( int ,  int ) ; // Lấy tất cả các nước đi hợp lệ cho quân cờ tại (x, y)
+
 	bool isGeneralFacing() const;
+    int isYouWin() const;
+	bool moveodering(const PlayerColor &);
+	/*int scoreMove(const Move& move);
+	int getPieceValueAt(Piece * p) const;*/
+	  
 };

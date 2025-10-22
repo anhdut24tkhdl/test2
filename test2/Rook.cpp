@@ -1,9 +1,10 @@
 ﻿#pragma once﻿
 #include "Rook.h"
 
-Rock::Rock(const PlayerColor& c, const int& x, const int& y, const bool& alive, const int& p, const sf::Sprite& sprite) : Piece(c, x, y, alive, p,sprite) {}
-bool Rock::isValidMove(int toX, int toY, Piece* grid[10][9]) const {
+Rock::Rock(const PlayerColor& c, const int& x, const int& y,  const int& p, const bool& alive, const sf::Sprite& sprite) : Piece(c, x, y,  p, alive, sprite) {}
+bool Rock::isValidMove(const int& toX, const  int& toY, Piece* grid[10][9]) const {
     if (toX < 0 || toX > 9 || toY < 0 || toY > 8) return false;
+    if (grid[toX][toY] != nullptr && grid[toX][toY]->getColor() == color) return false;
     int dx = toX - x;
     int dy = toY - y;
     if (dx != 0 && dy != 0) return false;
@@ -55,4 +56,21 @@ int Rock::getsymbolvalue() const
     if (getSymbol() == "RR") return 13;
     else return 6;
 
+}
+std::vector<std::pair<int, int>> Rock::getAllPossibleMoves(Piece* grid[10][9]) const {
+    std::vector<std::pair<int, int>> moves;
+
+    
+    for (int i = 0; i < 10; i++) {
+        if (i == x) continue; 
+        if (isValidMove(i, y, grid)) moves.emplace_back(i, y);
+    }
+
+   
+    for (int j = 0; j < 9; j++) {
+        if (j == y) continue; 
+        if (isValidMove(x, j, grid)) moves.emplace_back(x, j);
+    }
+
+    return moves;
 }
