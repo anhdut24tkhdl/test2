@@ -12,6 +12,7 @@
 #include <SFML/Graphics.hpp>
 #include <future>  // để dùng std::async
 #include <atomic>
+#include <windows.h>
 int lamtron(int x)
 {
     int rounded = round(x / 100.0) * 100;
@@ -27,16 +28,14 @@ std::string formatTime(int totalSeconds) {
     return oss.str();
 }
 int main() {
-    sf::RenderWindow window(sf::VideoMode({ 1200, 1300 }), "China Chess");
+    sf::RenderWindow window(sf::VideoMode({ 1300, 1200 }), "China Chess");
     Board board;
     Board drawBoard;
     //
     std::future<Move> aiFuture;     // để lưu kết quả AI đang chạy
-    std::atomic<bool> aiThinking = false;  // trạng thái AI đang tính
-    // đồng hồ 
-     int startTime = 900; // số giây bắt đầu (ví dụ: 60 giây = 1 phút)
-    int remainingTime = startTime;
-    window.setFramerateLimit(60);
+   std::atomic<bool> aiThinking = false;  // trạng thái AI đang tính
+
+   
     sf::Font font;
     if (!font.openFromFile("fontdongho.ttf")) {
         std::cerr << "❌ Không tìm thấy font Arial!" << std::endl;
@@ -44,18 +43,25 @@ int main() {
     }
 
     // ----- TEXT -----
+
     sf::Text timeText(font);
     timeText.setFont(font);
     timeText.setCharacterSize(50);
-    timeText.setStyle(sf::Text::Bold);
+    timeText.setStyle(sf::Text::Regular);
     timeText.setFillColor(sf::Color::White);
 	timeText.setPosition({ 1000 , 50 });
+    sf::Text timeText1(font);
+    timeText1.setFont(font);
+    timeText1.setCharacterSize(50);
+    timeText1.setStyle(sf::Text::Regular);
+    timeText1.setFillColor(sf::Color::White);
+    timeText1.setPosition({ 1000 , 1000 });
     // ----- NỀN -----
-    sf::RectangleShape bg({ (float)window.getSize().x, (float)window.getSize().y });
-    bg.setFillColor(sf::Color::Black);
+   /* sf::RectangleShape bg({ (float)window.getSize().x, (float)window.getSize().y });
+    bg.setFillColor(sf::Color::Black);*/
 
     // ----- ĐỒNG HỒ -----
-    sf::Clock timerClock;
+   /* sf::Clock timerClock;*/
 	// tạo texture
     sf::Texture quanxeden;
     sf::Texture quanxedo;
@@ -85,14 +91,14 @@ int main() {
 	nutchoigame.loadFromFile("nutchoigame.png");
 	sanhcho.loadFromFile("sanhcho.png");
 	thoatgame.loadFromFile("quanxeden.png");
-    choilai.loadFromFile("quanxeden.png");
+    choilai.loadFromFile("nutready.png");
     trolai.loadFromFile("nutquaylai.png");
 	checkmate.loadFromFile("checkmate.png");
 	youlose.loadFromFile("youlose.png");
     quanxeden.loadFromFile("quanxeden.png");
     quanxedo.loadFromFile("quanxedo.png");
   
-    quantuongden.loadFromFile("quantuongdenn.png");
+    quantuongden.loadFromFile("quantuongden.png");
     quantuongdo.loadFromFile("quantuongdo.png");
     quansiden.loadFromFile("quansiden.png");
     quansido.loadFromFile("quansido.png");
@@ -151,9 +157,10 @@ int main() {
     sf::Sprite choilaii(choilai);
 	sf::Sprite thoatgamee(thoatgame);
 	sf::Sprite sanhchoo(sanhcho);
-    trolaii.setPosition({ 1000 , 1000 });
-    choilaii.setPosition({ 1000 , 900 });
-	thoatgamee.setPosition({ 1000 , 800 });
+    trolaii.setPosition({ 1000 , 500 });
+    choilaii.setPosition({ 1000 , 700 });
+   
+	thoatgamee.setPosition({ 1000 , 900 });
 	nutchoigamee.setPosition({ 150,700 });
 	doihinhnenSprite.setPosition({ 1000,700 });
    
@@ -179,7 +186,7 @@ int main() {
     diem.setFillColor(sf::Color::Red);
     
    //AI
-   
+ 
  
     //
     sf::Vector2f mousePos;
@@ -188,14 +195,13 @@ int main() {
     int a = 1, b = 2;
     int passs = 0;
     // hiệu ứng 
-    sf::Vector2f startPos = quanma.getPosition();
-    sf::Vector2f endPos = sf::Vector2f(400.f, 200.f); // vị trí đích
-
-    float moveDuration = 0.3f; // thời gian bay (giây)
-    float elapsed = 0.f;
-    int countdown = 900; // 1 phút
+    int countdown1 = 900;
+     int countdown = 900;
+    // 1 phút
     
     sf::Clock clock;
+    window.setFramerateLimit(60);
+
     bool moving = true;
     //
     
@@ -242,12 +248,12 @@ int main() {
                 }
                 if (choilaii.getGlobalBounds().contains(mousePos))
                 {
-                    choilaii.setScale({ 1.1, 1.1 });
+                    choilaii.setScale({0.3 , 0.3 });
 
                 }
                 else
                 {
-                    choilaii.setScale({ 1, 1 });
+                    choilaii.setScale({0.3, 0.3 });
 
                 }
                 if (thoatgamee.getGlobalBounds().contains(mousePos))
@@ -260,6 +266,48 @@ int main() {
                     thoatgamee.setScale({ 1, 1 });
 
                 }
+            }
+            if (drawBoard.currentPlayer == PlayerColor::BLACK) {
+                if (clock.getElapsedTime().asSeconds() >= 1.0f && countdown > 0)
+                {
+                    countdown--;
+					std::cout << countdown << std::endl;
+                    clock.restart();
+
+                    std::stringstream ss;
+                    ss << std::setw(2) << std::setfill('0') << countdown / 60
+                        << ":" << std::setw(2) << std::setfill('0') << countdown % 60;
+                    timeText.setString(ss.str());
+                }
+                if (!aiThinking) {
+                    aiThinking = true;
+                    aiFuture = std::async(std::launch::async, [&board]() {
+                    
+                        return board.findBestMove(6);
+                        });
+                }
+
+                if (aiFuture.valid() && aiFuture.wait_for(std::chrono::milliseconds(1)) == std::future_status::ready) {
+                    Move move = aiFuture.get();
+                    if (board.movePiece(move.fromX, move.fromY, move.toX, move.toY))
+                        drawBoard.movePiece(move.fromX, move.fromY, move.toX, move.toY);
+
+                    aiThinking = false;
+                    a = move.toX;
+                    b = move.toY;
+
+                    node1.setFillColor(sf::Color::Yellow);
+                    node.setOutlineThickness(2);
+                    node.setOutlineColor(sf::Color::Red);
+                    int bankinh = node.getRadius();
+                    int bankinh1 = node1.getRadius();
+                    node.setPosition({ PosBoard[move.toX][move.toY].x - bankinh ,PosBoard[move.toX][move.toY].y - bankinh
+                        });
+
+                    node1.setPosition({ PosBoard[move.fromX][move.fromY].x - bankinh1 ,PosBoard[move.fromX][move.fromY].y - bankinh1 });
+                }
+
+
             }
             if (event->is<sf::Event::MouseButtonPressed>()) {
                 auto mouse = event->getIf<sf::Event::MouseButtonPressed>();
@@ -296,7 +344,9 @@ int main() {
 
 
                         board.clear();
+						drawBoard.clear();
                         board.history.clear();
+						drawBoard.history.clear();
                         node1.setFillColor(sf::Color::Transparent);
 
                         node.setOutlineColor(sf::Color::Transparent);
@@ -307,8 +357,8 @@ int main() {
                         board.grid[0][6] = new Elephant(PlayerColor::BLACK, 0, 6, true, 250, quantuongd);
                         board.grid[0][1] = new Knight(PlayerColor::BLACK, 0, 1, true, 400, quanmad);
                         board.grid[0][7] = new Knight(PlayerColor::BLACK, 0, 7, true, 400, quanmad1);
-                        board.grid[0][0] = new Rock(PlayerColor::BLACK, 0, 0, true, 1500, quanxed);
-                        board.grid[0][8] = new Rock(PlayerColor::BLACK, 0, 8, true, 1500, quanxed1);
+                        board.grid[0][0] = new Rock(PlayerColor::BLACK, 0, 0, true, 1200, quanxed);
+                        board.grid[0][8] = new Rock(PlayerColor::BLACK, 0, 8, true, 1200, quanxed1);
                         board.grid[2][1] = new Cannon(PlayerColor::BLACK, 2, 1, true, 1000, quanphaod);
                         board.grid[2][7] = new Cannon(PlayerColor::BLACK, 2, 7, true, 1000, quanphaod1);
                         board.grid[3][0] = new Pawn(PlayerColor::BLACK, 3, 0, true, 100, quantotd);
@@ -327,8 +377,8 @@ int main() {
                         board.grid[9][6] = new Elephant(PlayerColor::RED, 9, 6, true, 250, quantuong1);
                         board.grid[9][1] = new Knight(PlayerColor::RED, 9, 1, true, 400, quanma1);
                         board.grid[9][7] = new Knight(PlayerColor::RED, 9, 7, true, 400, quanma);
-                        board.grid[9][0] = new Rock(PlayerColor::RED, 9, 0, true, 1500, quanxe1);
-                        board.grid[9][8] = new Rock(PlayerColor::RED, 9, 8, true, 1500, quanxe);
+                        board.grid[9][0] = new Rock(PlayerColor::RED, 9, 0, true, 1200, quanxe1);
+                        board.grid[9][8] = new Rock(PlayerColor::RED, 9, 8, true, 100, quanxe);
                         board.grid[7][1] = new Cannon(PlayerColor::RED, 7, 1, true, 1000, quanphao1);
                         board.grid[7][7] = new Cannon(PlayerColor::RED, 7, 7, true, 1000, quanphao);
                         board.grid[6][0] = new Pawn(PlayerColor::RED, 6, 0, true, 100, quantot);
@@ -374,54 +424,27 @@ int main() {
                         drawBoard.grid[6][4] = new Pawn(PlayerColor::RED, 6, 4, true, 100, quantot2);
                         drawBoard.grid[6][6] = new Pawn(PlayerColor::RED, 6, 6, true, 100, quantot3);
                         drawBoard.grid[6][8] = new Pawn(PlayerColor::RED, 6, 8, true, 100, quantot4);
+						drawBoard.khoitao();
                         // clone bản hiện tại
                      
                     }
                 }
             }
-            if (drawBoard.currentPlayer==PlayerColor::BLACK) {
-                if (clock.getElapsedTime().asSeconds() >= 1.0f && countdown > 0)
+            
+
+            if(drawBoard.currentPlayer==PlayerColor::RED) {
+				
+                if (clock.getElapsedTime().asSeconds() >= 1.0f && countdown1 > 0)
                 {
-                    countdown--;
+                    countdown1--;
+                    
                     clock.restart();
 
                     std::stringstream ss;
-                    ss << std::setw(2) << std::setfill('0') << countdown;
-                    timeText.setString(ss.str());
+                    ss << std::setw(2) << std::setfill('0') << countdown1 / 60
+                        << ":" << std::setw(2) << std::setfill('0') << countdown1 % 60;
+                    timeText1.setString(ss.str());
                 }
-                if (!aiThinking) {
-                    aiThinking = true;
-                    aiFuture = std::async(std::launch::async, [&board]() {
-                        return board.findBestMove(6);
-                        });
-                }
-                
-                if (aiFuture.valid() && aiFuture.wait_for(std::chrono::milliseconds(1)) == std::future_status::ready) {
-                    Move move = aiFuture.get();
-                    if(board.movePiece(move.fromX, move.fromY, move.toX, move.toY))
-                     drawBoard.movePiece(move.fromX, move.fromY, move.toX, move.toY);
-					
-                    aiThinking  = false;
-                    a = move.toX;
-                    b = move.toY;
-
-                    node1.setFillColor(sf::Color::Yellow);
-                    node.setOutlineThickness(2);
-                    node.setOutlineColor(sf::Color::Red);
-                    int bankinh = node.getRadius();
-                    int bankinh1 = node1.getRadius();
-                    node.setPosition({ PosBoard[move.toX][move.toY].x - bankinh ,PosBoard[move.toX][move.toY].y - bankinh
-                        });
-
-                    node1.setPosition({ PosBoard[move.fromX][move.fromY].x - bankinh1 ,PosBoard[move.fromX][move.fromY].y - bankinh1 });
-                }
-             
-                
-            }
-
-
-            else {
-				
                 node.setFillColor(sf::Color::Transparent);
                
                 if (event->is<sf::Event::MouseButtonPressed>()) {
@@ -447,7 +470,7 @@ int main() {
 
                                 a = lamtron(dot.getPosition().y) / 100 - 1;
                                 b = lamtron(dot.getPosition().x) / 100 - 1;
-                                std::cout << a << b;
+                                
 
                                 //board.printBoard();
                                 selectedPiece->sprite.setColor(sf::Color::White);
@@ -464,43 +487,43 @@ int main() {
                             if (selectedPiece) selectedPiece->sprite.setColor(sf::Color::White);
                             dots.clear();
                             selectedPiece = nullptr;
-
-                            for (int i = 0; i < 10; i++)
-                                for (int j = 0; j < 9; j++)
-                                    if (drawBoard.grid[i][j] &&
-                                        drawBoard.grid[i][j]->sprite.getGlobalBounds().contains(mousePos) &&
-                                        drawBoard.grid[i][j]->getColor() == PlayerColor::RED) {
-
+                            for (int i = 0; i < drawBoard.redPieces.size(); i++)
+                            {
+                                if (drawBoard.redPieces[i]->getAlive() &&
+                                    drawBoard.redPieces[i]->sprite.getGlobalBounds().contains(mousePos)
+                                    ) {
 
 
-                                        selectedPiece = drawBoard.grid[i][j];
-                                        move = { i, j };
-                                        selectedPiece->sprite.setColor(sf::Color::Red);
 
-                                        for (auto& m : drawBoard.getAllPossibleMoves(i, j)) {
-                                            sf::CircleShape dot(10.f);
-                                            dot.setFillColor(sf::Color::Red);
-                                            dot.setPosition(PosBoard[m.first][m.second] - sf::Vector2f(10.f, 10.f));
-                                            int col = lamtron(dot.getPosition().x) / 100 - 1;
-                                            int row = lamtron(dot.getPosition().y) / 100 - 1;
+                                    selectedPiece = drawBoard.redPieces[i];
+                                    move = { selectedPiece->getX(), selectedPiece->getY() };
+                                    selectedPiece->sprite.setColor(sf::Color::Red);
+
+                                    for (auto& m : drawBoard.getAllPossibleMoves(selectedPiece->getX(), selectedPiece->getY())) {
+                                        sf::CircleShape dot(10.f);
+                                        dot.setFillColor(sf::Color::Red);
+                                        dot.setPosition(PosBoard[m.first][m.second] - sf::Vector2f(10.f, 10.f));
+                                        int col = lamtron(dot.getPosition().x) / 100 - 1;
+                                        int row = lamtron(dot.getPosition().y) / 100 - 1;
 
 
-                                            if (drawBoard.grid[row][col] != nullptr) {
+                                        if (drawBoard.grid[row][col] != nullptr) {
 
-                                                dot.setOrigin({ dot.getRadius(),dot.getRadius() });
-                                                dot.setScale({ 4,4 });
+                                            dot.setOrigin({ dot.getRadius(),dot.getRadius() });
+                                            dot.setScale({ 4,4 });
 
-                                                dot.setFillColor(sf::Color(255, 0, 0, 0));
-                                                drawBoard.grid[row][col]->sprite.setColor(sf::Color::Magenta);
-                                            }
-
-                                            dots.push_back(dot);
-
+                                            dot.setFillColor(sf::Color(255, 0, 0, 0));
+                                            drawBoard.grid[row][col]->sprite.setColor(sf::Color::Magenta);
                                         }
 
-                                        handled = true;
-                                        break;
+                                        dots.push_back(dot);
+
                                     }
+
+                                    handled = true;
+                                    break;
+                                }
+                            }
 
                         }
 
@@ -514,10 +537,9 @@ int main() {
 
                         if (selectedPiece == nullptr)
                         {
-                            for (int i = 0; i < 10; i++)
-                                for (int j = 0; j < 9; j++)
-                                    if (drawBoard.grid[i][j] != nullptr && drawBoard.grid[i][j]->getColor() == PlayerColor::BLACK)
-                                        drawBoard.grid[i][j]->sprite.setColor(sf::Color::White);
+							for (int i = 0; i < drawBoard.blackPieces.size(); i++)
+								if (drawBoard.blackPieces[i]->getAlive())
+                                        drawBoard.blackPieces[i]->sprite.setColor(sf::Color::White);
                         }
 
 
@@ -558,12 +580,7 @@ int main() {
         window.clear();
         window.draw(boardSprite);
         
-       for (int i = 0; i < 10; i++)
-            for (int j = 0; j < 9; j++)
-                if (drawBoard.grid[i][j] != nullptr) {
-                   drawBoard.grid[i][j]->sprite.setPosition({ PosBoard[i][j].x - size.x / 2,PosBoard[i][j].y - size.y / 2 });
-                    window.draw(drawBoard.grid[i][j]->sprite);
-                }
+   
         
         for (auto& dot : dots)
         {
@@ -577,23 +594,39 @@ int main() {
 			window.draw(lose);
        }*/
         window.draw(node);
-        window.draw(node1);
+       window.draw(node1);
         window.draw(trolaii);
         window.draw(choilaii);
-		window.draw(thoatgamee);
-        if (drawBoard.checkMate(a,b) && vaogame )
+	//	window.draw(thoatgamee);
+        for (int i = 0 ; i < drawBoard.redPieces.size() ; i++ )
+        {
+            if (drawBoard.redPieces[i]->getAlive())
+            {
+                drawBoard.redPieces[i]->sprite.setPosition({ PosBoard[drawBoard.redPieces[i]->getX()][drawBoard.redPieces[i]->getY()].x - size.x / 2,PosBoard[drawBoard.redPieces[i]->getX()][drawBoard.redPieces[i]->getY()].y - size.y / 2});
+                window.draw(drawBoard.redPieces[i]->sprite);
+            }
+		}
+        for (int i = 0 ; i < drawBoard.blackPieces.size() ; i++ )
+        {
+            if (drawBoard.blackPieces[i]->getAlive())
+            {
+                drawBoard.blackPieces[i]->sprite.setPosition({ PosBoard[drawBoard.blackPieces[i]->getX()][drawBoard.blackPieces[i]->getY()].x - size.x / 2, PosBoard[drawBoard.blackPieces[i]->getX()][drawBoard.blackPieces[i]->getY()].y - size.y / 2 });
+                window.draw(drawBoard.blackPieces[i]->sprite);
+            }
+		}
+       /* if (drawBoard.checkMate(a,b) && vaogame )
 		{
             
                 window.draw(checkmatee);
             
            
 
-        }
+        }*/
         if (choigame == 0) {
             window.draw(sanhchoo);
             window.draw(nutchoigamee);
         }
-       
+		window.draw(timeText1);
 		window.draw(timeText);
         window.display();
         

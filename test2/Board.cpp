@@ -58,7 +58,7 @@ Board::Board() : currentPlayer(PlayerColor::RED) {
 
         Piece* target = grid[toX][toY];
         if (target != nullptr && target->getColor() == currentPlayer) return false;
-        if (!piece->isValidMove(toX, toY, grid)) return false;
+       // if (!piece->isValidMove(toX, toY, grid)) return false;
         if (target != nullptr) {
             target->setAlive(false);  
         }
@@ -89,27 +89,84 @@ Board::Board() : currentPlayer(PlayerColor::RED) {
         return true;
     }
     
-    std::vector<std::pair<int, int>> Board::getAllPossibleMoves(const int &x, const int &y) const
+    std::vector<std::pair<int, int>> Board::getAllPossibleMoves(const int &x, const int &y) 
     {
         std::vector<std::pair<int, int>> moves;
         if (x < 0 || x > 9 || y < 0 || y > 8) {
             return moves;
         }
-        Piece* piece = grid[x][y];
-        if (piece == nullptr) return moves;
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 9; j++) {
-                if (i == x && j == y) continue;
-                Piece* target = grid[i][j];
-                if (target != nullptr && target->getColor() == piece->getColor()) continue;
-                if (piece->isValidMove(i, j, const_cast<Piece * (*)[9]>(grid))) {
-                    moves.push_back({ i, j });
-                }
+		for (int i = 0; i < redPieces.size(); i++)
+        {
+			
+            if (redPieces[i]->getX() == x && redPieces[i]->getY() == y) {
+               moves =  redPieces[i]->getAllPossibleMoves(grid);
             }
         }
+        for (int i = (int)moves.size() - 1; i >= 0; i--)
+        {
+            this->movePiece(x, y, moves[i].first, moves[i].second);
+
+            if (this->isGeneralFacing() || getCheckmate()) {
+                moves.erase(moves.begin() + i);
+            }
+
+            this->undo();
+        }
+
         return moves;
     }
-   
+
+    bool Board::getCheckmate() 
+    {
+		int redGeneralX = -1, redGeneralY = -1;
+        for (int i = 0; i < redPieces.size(); i++)
+        {
+            if (redPieces[i]->getSymbol() == "RG" && redPieces[i]->getAlive())
+            {
+                redGeneralX = redPieces[i]->getX();
+                redGeneralY = redPieces[i]->getY();
+            }
+            
+        }
+		if (redGeneralX == -1 || redGeneralY == -1) return false;
+
+        for (int i = 0 ; i < blackPieces.size() ; i++)
+        {
+            if (blackPieces[i]->isValidMove(redGeneralX, redGeneralY, grid))
+            {
+                return true; 
+            }
+        }
+		return false;
+		}
+
+    bool Board::Checkmate()
+    {
+        int blackGeneralX = -1, blackGeneralY = -1;
+        for (int i = 0; i < redPieces.size(); i++)
+        {
+            if (blackPieces[i]->getSymbol() == "RG" && blackPieces[i]->getAlive())
+            {
+                blackGeneralX = redPieces[i]->getX();
+                blackGeneralY = redPieces[i]->getY();
+            }
+
+        }
+        if (blackGeneralX == -1 || blackGeneralY == -1) return false;
+
+        for (int i = 0; i < redPieces.size(); i++)
+        {
+            if (redPieces[i]->isValidMove(blackGeneralX, blackGeneralY, grid))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    bool Tamchieu()
+    {
+
+    }
     void Board::printBoard() const {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 9; j++) {
@@ -135,23 +192,19 @@ Board::Board() : currentPlayer(PlayerColor::RED) {
             std::vector<std::pair<int, int>> possibleMoves = piece->getAllPossibleMoves(grid);
 
             for (auto& target : possibleMoves) {
-                // ... tạo move ...
 				Move move;
 				move.fromX = piece->getX();
 				move.fromY = piece->getY();
 				move.toX = target.first;
 				move.toY = target.second;
 				move.movedPiece = piece;
-				move.capturedPiece = grid[target.first][target.second]; // NULL nếu không có quân bị ăn
+				move.capturedPiece = grid[target.first][target.second]; 
 
                 allMoves.push_back(move);
             }
         }
 
-        // THÊM SẮP XẾP NƯỚC ĐI Ở ĐÂY
-        //std::sort(allMoves.begin(), allMoves.end(), [this](const Move& a, const Move& b) {
-        //    return scoreMove(a) > scoreMove(b); // Nước đi tốt hơn được xét trước
-        //    });
+     
 
         return allMoves;
     }
@@ -193,9 +246,7 @@ Board::Board() : currentPlayer(PlayerColor::RED) {
             }
         }
 
-        if (this->isGeneralFacing()) {
-            PointAI -= 10000;
-        }
+       
 
         return PointAI - PointPlayer;
     }
@@ -206,7 +257,7 @@ Board::Board() : currentPlayer(PlayerColor::RED) {
     {
         if (history.IsEmpty()) return;
         Move lastMove = history.Pop();
-
+		
         grid[lastMove.fromX][lastMove.fromY] = lastMove.movedPiece;
         grid[lastMove.toX][lastMove.toY] = lastMove.capturedPiece;
 
@@ -217,6 +268,7 @@ Board::Board() : currentPlayer(PlayerColor::RED) {
             lastMove.capturedPiece->setPosition(lastMove.toX, lastMove.toY);
             lastMove.capturedPiece->setAlive(true);
         }
+         
        
         currentPlayer = (currentPlayer == PlayerColor::RED) ? PlayerColor::BLACK : PlayerColor::RED;
     }
@@ -224,7 +276,7 @@ Board::Board() : currentPlayer(PlayerColor::RED) {
     //minimax
     int Board::minimax(int depth, int alpha, int beta, bool isTurnBlack)
     {
-        if (depth == 0 || this->isGameover()||this->isGeneralFacing())
+        if (depth == 0 || this->isGameover())
             return this->EvaluatePoint();
 
         
@@ -302,39 +354,33 @@ Board::Board() : currentPlayer(PlayerColor::RED) {
     {
         int bestValue = -1000000;
         Move bestMove;
-        std::vector<Move> moves = this->getAllPossibleMoves(PlayerColor::BLACK);
+
+        // 1️⃣ Lấy nước đi đã sắp xếp theo moveOrdering
+        std::vector<Move> moves = moveOrdering(PlayerColor::BLACK); // ưu tiên nước ăn quân, chiếu tướng, ...
+
+        // 2️⃣ Lặp qua các nước đi đã sắp xếp
         for (int i = 0; i < moves.size(); i++)
         {
             this->movePiece(moves[i].fromX, moves[i].fromY, moves[i].toX, moves[i].toY);
             int moveValue = minimax(depth - 1, -100000, 100000, false);
             this->undo();
+
+            // 3️⃣ Cập nhật best move
             if (moveValue > bestValue)
             {
                 bestValue = moveValue;
                 bestMove = moves[i];
             }
+            if(bestValue == 10000)
+				break;
+
         }
 
         return bestMove;
     }
-    bool Board::checkMate(int x, int y)
+    bool Board::checkMate()
     {
-        
-        for (auto& m : getAllPossibleMoves(x, y))
-        {
-            Piece* target = grid[m.first][m.second];
-            if (target == nullptr) continue;
-
-            std::string symbol = target->getSymbol();
-
-            if (symbol == "BG" ||
-                symbol == "RG" )
-            {
-            
-                return true;
-            }
-        }
-        return false;
+        return true;
     }
     void Board::initZobristTable() {
         std::mt19937_64 rng(2025); 
@@ -367,88 +413,46 @@ Board::Board() : currentPlayer(PlayerColor::RED) {
     }
     bool Board::Luatnuocdidung(PlayerColor color)
     {
-        for (int i = 0; i < 10; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                Piece* piece = grid[i][j];
-                if (piece != nullptr && piece->getColor() == color) {
-                    std::vector<std::pair<int, int>> moves = getAllPossibleMoves(i, j);
-                    for (const auto& move : moves) {
-
-                       
-                        movePiece(i, j, move.first, move.second);
-
-                        bool biChieu = checkMate(move.first,move.second);
-
-                       
-                        undo();
-
-                       
-                        if (!biChieu)
-                            return true; 
-                    }
-                }
-            }
-        }
-        return false; 
+       
     }
     bool Board::isGeneralFacing() const {
         int redX = -1, redY = -1;
         int blackX = -1, blackY = -1;
 
-       
-        for (int i = 0; i < 10; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                Piece* p = grid[i][j];
-                if (p != nullptr) {
-                    if (p->getSymbol() == "RG") { 
-                        redX = i; redY = j;
-                    }
-                    else if (p->getSymbol() == "BG") { 
-                        blackX = i; blackY = j;
-                    }
-                }
+        for (auto p : redPieces)
+            if (p->getSymbol() == "RG" && p->getAlive()) {
+                redX = p->getX();
+                redY = p->getY();
+                break;
             }
-        }
 
-       
+        for (auto p : blackPieces)
+            if (p->getSymbol() == "BG" && p->getAlive()) {
+                blackX = p->getX();
+                blackY = p->getY();
+                break;
+            }
+
         if (redX == -1 || blackX == -1) return false;
+        if (redY != blackY) return false; // khác cột => không đối mặt
 
-       
-        if (redY != blackY) return false;
+        int minX = std::min(redX, blackX);
+        int maxX = std::max(redX, blackX);
 
-       
-        int y = redY;
-        int start = std::min(redX, blackX) + 1;
-        int end = std::max(redX, blackX);
-
-        for (int x = start; x < end; ++x) {
-            if (grid[x][y] != nullptr) {
-                return false; 
-            }
+        // kiểm tra giữa 2 tướng có quân nào chặn không
+        for (int i = minX + 1; i < maxX; i++) {
+            if (grid[i][redY] != nullptr)
+                return false;
         }
 
-    
-        return true;
+        return true; // cùng cột và không bị chặn
     }
-    int Board::isYouWin() const
+
+    void Board::redo()
     {
-        for (int i = 0; i < 10; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                Piece* p = grid[i][j];
-                if (p != nullptr) {
-                    if (p->getSymbol() == "RG")
-                        return 0;   
-                    else if (p->getSymbol() == "BG")
-                        return 1;
-                }
-            }
-        }
-        return 1000;
-    }
-    void Board::redo(const Move & move)
-    {
-        if (redon.IsFull()) return;
-		this->redon.Push(move);
+		if (this->redon.IsEmpty()) return;
+        Move move = redon.Pop();
+		this->movePiece(move.fromX, move.fromY, move.toX, move.toY);
     }
     bool Board::moveodering(const PlayerColor& c )
     {

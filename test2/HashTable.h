@@ -19,7 +19,7 @@ struct HashEntry {
 
 class TranspositionTable {
 private:
-    const int TABLE_SIZE = 1 << 21; // 1 triệu ô
+    const int TABLE_SIZE = 1 << 23; // 1 triệu ô
     HashEntry* table;
 
     uint64_t hashFunction(uint64_t key) const;
