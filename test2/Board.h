@@ -26,14 +26,14 @@ public:
     Board();
     ~Board();
     void khoitao();
-	Stack history = Stack(200); 
+	Stack history = Stack(200); // Lưu trữ lịch sử các nước đi
     Stack redon = Stack(10);
-    std::vector<Piece*> redPieces;
-    std::vector<Piece*> blackPieces;
+	std::vector<Piece*> redPieces;// lưu trữ các quân cờ đỏ
+	std::vector<Piece*> blackPieces;// lưu trữ các quân cờ đen
     bool movePiece(const int &, const int&,  const int& , const int& ); // Di chuyển quân cờ
     std::vector<std::pair<int, int>> getAllPossibleMoves(const int &,const  int &) ; // Lấy tất cả các nước đi hợp lệ cho quân cờ tại (x, y)
 	void printBoard() const;
-    int minimax(int ,int , int , bool );
+    int minimax(int ,int , int , bool );//
 	bool isGameover() const;
 	std::vector<Move> getAllPossibleMoves( PlayerColor);
     int EvaluatePoint( )const;
@@ -43,10 +43,7 @@ public:
     bool checkMate();
     void clear();
 	bool Luatnuocdidung(PlayerColor color) ;
-
 	bool isGeneralFacing() const;
-    int isYouWin() const;
-	bool moveodering(const PlayerColor &);
 	bool getCheckmate();
     bool Checkmate();
     bool tamchieu();

@@ -58,7 +58,6 @@ Board::Board() : currentPlayer(PlayerColor::RED) {
 
         Piece* target = grid[toX][toY];
         if (target != nullptr && target->getColor() == currentPlayer) return false;
-       // if (!piece->isValidMove(toX, toY, grid)) return false;
         if (target != nullptr) {
             target->setAlive(false);  
         }
@@ -98,7 +97,7 @@ Board::Board() : currentPlayer(PlayerColor::RED) {
 		for (int i = 0; i < redPieces.size(); i++)
         {
 			
-            if (redPieces[i]->getX() == x && redPieces[i]->getY() == y) {
+            if ((redPieces[i]->getX() == x && redPieces[i]->getY() == y)&&redPieces[i]->getAlive()) {
                moves =  redPieces[i]->getAllPossibleMoves(grid);
             }
         }
@@ -355,17 +354,15 @@ Board::Board() : currentPlayer(PlayerColor::RED) {
         int bestValue = -1000000;
         Move bestMove;
 
-        // 1️⃣ Lấy nước đi đã sắp xếp theo moveOrdering
-        std::vector<Move> moves = moveOrdering(PlayerColor::BLACK); // ưu tiên nước ăn quân, chiếu tướng, ...
+       
+        std::vector<Move> moves = moveOrdering(PlayerColor::BLACK); 
 
-        // 2️⃣ Lặp qua các nước đi đã sắp xếp
+    
         for (int i = 0; i < moves.size(); i++)
         {
             this->movePiece(moves[i].fromX, moves[i].fromY, moves[i].toX, moves[i].toY);
             int moveValue = minimax(depth - 1, -100000, 100000, false);
             this->undo();
-
-            // 3️⃣ Cập nhật best move
             if (moveValue > bestValue)
             {
                 bestValue = moveValue;
@@ -434,18 +431,18 @@ Board::Board() : currentPlayer(PlayerColor::RED) {
             }
 
         if (redX == -1 || blackX == -1) return false;
-        if (redY != blackY) return false; // khác cột => không đối mặt
+        if (redY != blackY) return false; 
 
         int minX = std::min(redX, blackX);
         int maxX = std::max(redX, blackX);
 
-        // kiểm tra giữa 2 tướng có quân nào chặn không
+       
         for (int i = minX + 1; i < maxX; i++) {
             if (grid[i][redY] != nullptr)
                 return false;
         }
 
-        return true; // cùng cột và không bị chặn
+        return true; 
     }
 
     void Board::redo()
@@ -454,17 +451,5 @@ Board::Board() : currentPlayer(PlayerColor::RED) {
         Move move = redon.Pop();
 		this->movePiece(move.fromX, move.fromY, move.toX, move.toY);
     }
-    bool Board::moveodering(const PlayerColor& c )
-    {
-		if (history.IsEmpty()) return false;
-		Move lastMove = history.Top();
-        if(lastMove.capturedPiece == nullptr)
-			return  false;
-        if (c == PlayerColor::BLACK)
-        {
-            if (lastMove.capturedPiece->getSymbol() == "RC" || lastMove.capturedPiece->getSymbol() == "RR" || lastMove.capturedPiece->getSymbol() == "RG")
-                return true;
-        }
-		return false;
-    }
+    
    
