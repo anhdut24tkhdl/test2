@@ -28,9 +28,10 @@ std::string formatTime(int totalSeconds) {
     return oss.str();
 }
 int main() {
-    sf::RenderWindow window(sf::VideoMode({ 1300, 1200 }), "China Chess");
+    sf::RenderWindow window(sf::VideoMode({ 1200, 1200 }), "China Chess");
     Board board;
     Board drawBoard;
+    int test = 1;
     //
     std::future<Move> aiFuture;     // để lưu kết quả AI đang chạy
    std::atomic<bool> aiThinking = false;  // trạng thái AI đang tính
@@ -165,8 +166,8 @@ int main() {
 	doihinhnenSprite.setPosition({ 1000,700 });
    
     sf::Vector2u size = quanxeden.getSize();
-    sf::Sprite test(quanvuado);
-	test.setPosition({ 100,100 });
+   /* sf::Sprite test(quanvuado);
+	test.setPosition({ 100,100 });*/
     sf::CircleShape diem(10);
     diem.setFillColor(sf::Color::Red);
    
@@ -200,7 +201,7 @@ int main() {
     // 1 phút
     
     sf::Clock clock;
-    window.setFramerateLimit(60);
+    window.setFramerateLimit(120);
 
     bool moving = true;
     //
@@ -219,7 +220,34 @@ int main() {
             if (event->is<sf::Event::Closed>()) {
                 window.close();
             }
-           
+            if (drawBoard.currentPlayer == PlayerColor::BLACK) {
+                if (clock.getElapsedTime().asSeconds() >= 1.0f && countdown > 0)
+                {
+                    countdown--;
+                    std::cout << countdown << std::endl;
+                    clock.restart();
+
+                    std::stringstream ss;
+                    ss << std::setw(2) << std::setfill('0') << countdown / 60
+                        << ":" << std::setw(2) << std::setfill('0') << countdown % 60;
+                    timeText.setString(ss.str());
+                }
+            }
+            else
+            {
+                if (clock.getElapsedTime().asSeconds() >= 1.0f && countdown1 > 0)
+                {
+                    countdown1--;
+
+                    clock.restart();
+
+                    std::stringstream ss;
+                    ss << std::setw(2) << std::setfill('0') << countdown1 / 60
+                        << ":" << std::setw(2) << std::setfill('0') << countdown1 % 60;
+                    timeText1.setString(ss.str());
+                }
+              
+            }
             if (event->is<sf::Event::MouseMoved>())
             {
                 auto mouse = event->getIf<sf::Event::MouseMoved>();
@@ -283,7 +311,7 @@ int main() {
                     aiThinking = true;
                     aiFuture = std::async(std::launch::async, [&board]() {
                     
-                        return board.findBestMove(6);
+                        return board.findBestMove(2);
                         });
                 }
 
@@ -317,7 +345,7 @@ int main() {
                     if (nutchoigamee.getGlobalBounds().contains(mousePos))
                     {
                         choigame = 1;
-
+                        test = 1;
 
                     }
                     if (trolaii.getGlobalBounds().contains(mousePos))
@@ -341,7 +369,7 @@ int main() {
                     /// set lai ban co
                     if (choilaii.getGlobalBounds().contains(mousePos)) {
                         vaogame = true;
-
+                        test = -1;
 
                         board.clear();
 						drawBoard.clear();
@@ -357,10 +385,10 @@ int main() {
                         board.grid[0][6] = new Elephant(PlayerColor::BLACK, 0, 6, true, 250, quantuongd);
                         board.grid[0][1] = new Knight(PlayerColor::BLACK, 0, 1, true, 400, quanmad);
                         board.grid[0][7] = new Knight(PlayerColor::BLACK, 0, 7, true, 400, quanmad1);
-                        board.grid[0][0] = new Rock(PlayerColor::BLACK, 0, 0, true, 1200, quanxed);
-                        board.grid[0][8] = new Rock(PlayerColor::BLACK, 0, 8, true, 1200, quanxed1);
-                        board.grid[2][1] = new Cannon(PlayerColor::BLACK, 2, 1, true, 1000, quanphaod);
-                        board.grid[2][7] = new Cannon(PlayerColor::BLACK, 2, 7, true, 1000, quanphaod1);
+                        board.grid[0][0] = new Rock(PlayerColor::BLACK, 0, 0, true, 1000, quanxed);
+                        board.grid[0][8] = new Rock(PlayerColor::BLACK, 0, 8, true, 1000, quanxed1);
+                        board.grid[2][1] = new Cannon(PlayerColor::BLACK, 2, 1, true, 900, quanphaod);
+                        board.grid[2][7] = new Cannon(PlayerColor::BLACK, 2, 7, true, 900, quanphaod1);
                         board.grid[3][0] = new Pawn(PlayerColor::BLACK, 3, 0, true, 100, quantotd);
                         board.grid[3][2] = new Pawn(PlayerColor::BLACK, 3, 2, true, 100, quantotd1);
                         board.grid[3][4] = new Pawn(PlayerColor::BLACK, 3, 4, true, 100, quantotd2);
@@ -377,10 +405,10 @@ int main() {
                         board.grid[9][6] = new Elephant(PlayerColor::RED, 9, 6, true, 250, quantuong1);
                         board.grid[9][1] = new Knight(PlayerColor::RED, 9, 1, true, 400, quanma1);
                         board.grid[9][7] = new Knight(PlayerColor::RED, 9, 7, true, 400, quanma);
-                        board.grid[9][0] = new Rock(PlayerColor::RED, 9, 0, true, 1200, quanxe1);
-                        board.grid[9][8] = new Rock(PlayerColor::RED, 9, 8, true, 100, quanxe);
-                        board.grid[7][1] = new Cannon(PlayerColor::RED, 7, 1, true, 1000, quanphao1);
-                        board.grid[7][7] = new Cannon(PlayerColor::RED, 7, 7, true, 1000, quanphao);
+                        board.grid[9][0] = new Rock(PlayerColor::RED, 9, 0, true, 1000, quanxe1);
+                        board.grid[9][8] = new Rock(PlayerColor::RED, 9, 8, true, 1000, quanxe);
+                        board.grid[7][1] = new Cannon(PlayerColor::RED, 7, 1, true, 900, quanphao1);
+                        board.grid[7][7] = new Cannon(PlayerColor::RED, 7, 7, true, 900, quanphao);
                         board.grid[6][0] = new Pawn(PlayerColor::RED, 6, 0, true, 100, quantot);
                         board.grid[6][2] = new Pawn(PlayerColor::RED, 6, 2, true, 100, quantot1);
                         board.grid[6][4] = new Pawn(PlayerColor::RED, 6, 4, true, 100, quantot2);
@@ -434,17 +462,7 @@ int main() {
 
             if(drawBoard.currentPlayer==PlayerColor::RED) {
 				
-                if (clock.getElapsedTime().asSeconds() >= 1.0f && countdown1 > 0)
-                {
-                    countdown1--;
-                    
-                    clock.restart();
-
-                    std::stringstream ss;
-                    ss << std::setw(2) << std::setfill('0') << countdown1 / 60
-                        << ":" << std::setw(2) << std::setfill('0') << countdown1 % 60;
-                    timeText1.setString(ss.str());
-                }
+              
                 node.setFillColor(sf::Color::Transparent);
                
                 if (event->is<sf::Event::MouseButtonPressed>()) {
@@ -596,7 +614,7 @@ int main() {
         window.draw(node);
        window.draw(node1);
         window.draw(trolaii);
-        window.draw(choilaii);
+      //  window.draw(choilaii);
 	//	window.draw(thoatgamee);
         for (int i = 0 ; i < drawBoard.redPieces.size() ; i++ )
         {
@@ -622,6 +640,12 @@ int main() {
            
 
         }*/
+        if (test == 1)
+        {
+            window.draw(choilaii);
+            
+
+        }
         if (choigame == 0) {
             window.draw(sanhchoo);
             window.draw(nutchoigamee);

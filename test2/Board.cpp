@@ -99,6 +99,7 @@ Board::Board() : currentPlayer(PlayerColor::RED) {
 			
             if ((redPieces[i]->getX() == x && redPieces[i]->getY() == y)&&redPieces[i]->getAlive()) {
                moves =  redPieces[i]->getAllPossibleMoves(grid);
+               break;
             }
         }
         for (int i = (int)moves.size() - 1; i >= 0; i--)
@@ -114,7 +115,7 @@ Board::Board() : currentPlayer(PlayerColor::RED) {
 
         return moves;
     }
-
+        
     bool Board::getCheckmate() 
     {
 		int redGeneralX = -1, redGeneralY = -1;
@@ -131,7 +132,7 @@ Board::Board() : currentPlayer(PlayerColor::RED) {
 
         for (int i = 0 ; i < blackPieces.size() ; i++)
         {
-            if (blackPieces[i]->isValidMove(redGeneralX, redGeneralY, grid))
+            if (blackPieces[i]->getAlive() &&blackPieces[i]->isValidMove(redGeneralX, redGeneralY, grid))
             {
                 return true; 
             }

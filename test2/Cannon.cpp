@@ -55,7 +55,7 @@ std::string Cannon::getSymbol() const {
 void Cannon::updatePoint(const int&x, const int&y)
 {
     
-	this->Point = 500;
+	this->Point = 900;
     if (y >= 2 && y <= 6) this->Point += 20;
     if (x >= 3 && x <= 6) this->Point += 15;
 }
